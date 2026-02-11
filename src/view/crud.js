@@ -50,9 +50,11 @@ function mainFrm() {
     const valueToStars = (value) => {
       const numValue = parseInt(value, 10);
       // 유효하지 않은 값이면 빈 문자열 반환
+      //   숫자가 아니거나(Nan) 0 미만이거나 4보다 크면 별 제외
       if (isNaN(numValue) || numValue < 0 || numValue > 4) {
         return "";
       }
+      //   현재 값에서 1을 더한 값만큼 ⭐️반복
       return "⭐️".repeat(numValue + 1);
     };
 
@@ -74,10 +76,15 @@ function mainFrm() {
                 </tr>
             `;
       })
-      .join(""); // 배열을 하나의 문자열로 합침
+      // 배열을 하나의 문자열로 합침("나는 이것을 해볼것이다."=> "나는이것을해볼것이다.")
+      .join("");
 
     // 3. 화면(DOM)에 그리기
+    // 최상위 요소, id app을 가져옴
     const app = document.getElementById("app");
+    // app에 html 그리기
+    // 멤버의 속성값들을 테이블의 형태로 만들었던 tableRows를
+    // 테이블 body(테이블에서 주 내용들이 될 부분)에 추가
     app.innerHTML = `
             <table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
                 <thead>
@@ -111,7 +118,11 @@ function mainFrm() {
  * 역할: 헤더의 체크박스를 누르면, 아래 모든 멤버의 체크박스를 켜거나 끕니다.
  */
 function sumCheckbox(masterCheckbox) {
+  // memberCheckbox이 달린 name을 찾음
+  // 각 멤버에 체크박스를 설정하는 요소 = memberCheckbox
+  //memberCheckbox가 name인 요소들을 모두 모음
   const checkboxes = document.getElementsByName("memberCheckbox");
+  //   name이 memberCheckbox인 모든 체크박스를 체크
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].checked = masterCheckbox.checked;
   }
@@ -139,7 +150,10 @@ function addMember() {
                     // 입력값 가져오기
                     const name = document.getElementById('name').value;
                     const age = document.getElementById('age').value;
+                    // 성별은 체크되어있는 값을 기준
                     const sex = document.querySelector('input[name="sex"]:checked');
+                    // 클릭한 별점의 개수에 따라
+                    // 해당 별점의 값을 가져옴
                     const value = document.getElementById('ability').value;
 
                     // 유효성 검사: 빈 값이 있으면 경고
@@ -154,6 +168,7 @@ function addMember() {
                     }
 
                     // 저장할 객체 생성
+                    // 이름, 나이, 성별, (등급)값
                     const newMember = { name, age, sex: sex.value, value };
 
                     // ★ 핵심: 부모창(window.opener)의 localStorage에 접근
@@ -203,15 +218,18 @@ function addMember() {
  */
 function modifyMember() {
   // 1. 체크된 박스들만 가져오기
+  // 멤버들이 지정된 영역 중에 체크된 것들만
   const checkedBoxes = document.querySelectorAll(
     'input[type="checkbox"][name="memberCheckbox"]:checked',
   );
 
-  // 유효성 검사: 아무것도 선택 안 했거나, 2개 이상 선택했을 때
+  // 유효성 검사 통해서 수정에 방해되는 조건 막기
+  // 아무것도 선택 안 했거나
   if (checkedBoxes.length === 0) {
     alert("수정할 내용을 선택하십시오.");
     return;
   }
+  // 2개 이상 선택했을 때
   if (checkedBoxes.length > 1) {
     alert("하나의 항목만 선택하여 주십시오.");
     return;
@@ -220,9 +238,14 @@ function modifyMember() {
   // 2. 수정할 대상 데이터 찾기
   // 체크박스에 심어둔 data-index 속성으로 몇 번째 멤버인지 확인
   const index = checkedBoxes[0].getAttribute("data-index");
+  // member들 명단은 localstorage에 지정되어 있는 teamMembers 키의 값에 의해 결정
+  //   팀이 없다면 빈 명단 지정
   let members = JSON.parse(localStorage.getItem("teamMembers")) || [];
+//   전체 명단중에 수정하기로 한 명단 지정
   const memberToModify = members[index];
 
+//   유효성 검사
+//   명단에 없다면 알람과 함께 아무것도 하지 않음
   if (!memberToModify) {
     alert("선택한 멤버 정보를 찾을 수 없습니다.");
     return;

@@ -1,10 +1,8 @@
-// distributeTeamsBalanced 가져오기
-import distributeTeamsBalanced from "../model/distributeTeamsBalanced.js";
+//  bindDistributeEvents 가져오기
+import bindDistributeEvents from "../controller/bindDistributeEvents.js";
+
 
 // 가져온 것 테스트
-
-
-
 
 // ===========================================================
 // 1. LocalStorage 폴리필 (Polyfill)
@@ -46,32 +44,21 @@ if (typeof localStorage === "undefined") {
  * 역할: localStorage에 저장된 멤버 데이터를 불러와서, HTML 테이블로 화면에 그려줍니다.
  * 실행 시점: 페이지 로드 시, 멤버 추가/수정/삭제 후 화면 갱신 시
  */
+
 function mainFrm() {
   try {
-    // 1. 데이터 가져오기
-    // localStorage는 문자열만 저장하므로 JSON.parse로 객체 배열로 변환합니다.
-    // 데이터가 없으면 빈 배열([])을 사용합니다.
     let members = JSON.parse(localStorage.getItem("teamMembers")) || [];
 
-    // [헬퍼 함수] 숫자(0~4)를 별(⭐️) 문자열로 바꿔주는 함수
-    // 예: 0 -> ⭐️, 2 -> ⭐️⭐️⭐️
     const valueToStars = (value) => {
       const numValue = parseInt(value, 10);
-      // 유효하지 않은 값이면 빈 문자열 반환
-      //   숫자가 아니거나(Nan) 0 미만이거나 4보다 크면 별 제외
       if (isNaN(numValue) || numValue < 0 || numValue > 4) {
         return "";
       }
-      //   현재 값에서 1을 더한 값만큼 ⭐️반복
       return "⭐️".repeat(numValue + 1);
     };
 
-    // 2. 테이블 행(TR) 생성하기 (map 함수 사용)
-    // 멤버 배열을 순회하면서 HTML 문자열로 변환합니다.
     let tableRows = members
       .map((member, index) => {
-        // 각 행마다 체크박스, 이름, 나이, 성별, 별점을 출력
-        // data-index="${index}"를 심어놓는 이유: 나중에 수정/삭제할 때 몇 번째 멤버인지 알기 위함
         return `
                 <tr style="border: 1px solid black;">
                     <td style="border: 1px solid black; padding: 5px; text-align: center;">
@@ -84,15 +71,11 @@ function mainFrm() {
                 </tr>
             `;
       })
-      // 배열을 하나의 문자열로 합침("나는 이것을 해볼것이다."=> "나는이것을해볼것이다.")
       .join("");
 
-    // 3. 화면(DOM)에 그리기
-    // 최상위 요소, id app을 가져옴
     const app = document.getElementById("app");
-    // app에 html 그리기
-    // 멤버의 속성값들을 테이블의 형태로 만들었던 tableRows를
-    // 테이블 body(테이블에서 주 내용들이 될 부분)에 추가
+    
+    // [수정] 결과가 나올 영역(div id="team-result-area")을 추가했습니다!
     app.innerHTML = `
             <table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
                 <thead>
@@ -107,19 +90,31 @@ function mainFrm() {
                     </tr>
                 </thead>
                 <tbody>
-                    ${tableRows} </tbody>
+                    ${tableRows}
+                </tbody>
             </table>
             <br>
-            <button onclick="addMember()">추가</button>
-            <button onclick="modifyMember()">수정</button>
-            <button onclick="delMember()">삭제</button>
+            <div class="controls">
+                <button onclick="addMember()">추가</button>
+                <button onclick="modifyMember()">수정</button>
+                <button onclick="delMember()">삭제</button>
+                <button id="btn-assign-teams" style="background-color: #e3f2fd; font-weight: bold; cursor: pointer;">
+                    ⚖️ 조건부 팀 배정
+                </button>
+            </div>
+            <hr>
+            <div id="team-result-area" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;"></div>
         `;
+
+    // [핵심 수정] 화면을 그린 직후에, 팀 배정 버튼에 이벤트를 다시 연결해줍니다.
+    bindDistributeEvents();
+
   } catch (error) {
-    //   error가 발생하면
-    // Error rendering main form: 라는 문구와 함께 력러 출력
     console.error("Error rendering main form:", error);
   }
 }
+
+
 
 /**
  * [함수: sumCheckbox]
@@ -249,11 +244,11 @@ function modifyMember() {
   // member들 명단은 localstorage에 지정되어 있는 teamMembers 키의 값에 의해 결정
   //   팀이 없다면 빈 명단 지정
   let members = JSON.parse(localStorage.getItem("teamMembers")) || [];
-//   전체 명단중에 수정하기로 한 명단 지정
+  //   전체 명단중에 수정하기로 한 명단 지정
   const memberToModify = members[index];
 
-//   유효성 검사
-//   명단에 없다면 알람과 함께 아무것도 하지 않음
+  //   유효성 검사
+  //   명단에 없다면 알람과 함께 아무것도 하지 않음
   if (!memberToModify) {
     alert("선택한 멤버 정보를 찾을 수 없습니다.");
     return;
@@ -387,67 +382,11 @@ function startcurd() {
 // 앱 시작
 startcurd();
 
-
-
-
-const dummyMembers = [];
-for (let i = 0; i < 30; i++) {
-  dummyMembers.push({
-    name: `Member${i}`,
-    sex: i < 12 ? "여자" : "남자", // 여자 12명, 남자 18명
-    age: 20 + (i % 10), // 20~29세
-    value: i % 5, // 능력치 0~4 골고루
-  });
-}
-
-// 임시 결과
-// [
-//   { name: 'Member0', sex: '여자', age: 20, value: 0 },
-//   { name: 'Member1', sex: '여자', age: 21, value: 1 },
-//   { name: 'Member2', sex: '여자', age: 22, value: 2 },
-//   { name: 'Member3', sex: '여자', age: 23, value: 3 },
-//   { name: 'Member4', sex: '여자', age: 24, value: 4 },
-//   { name: 'Member5', sex: '여자', age: 25, value: 0 },
-//   { name: 'Member6', sex: '여자', age: 26, value: 1 },
-//   { name: 'Member7', sex: '여자', age: 27, value: 2 },
-//   { name: 'Member8', sex: '여자', age: 28, value: 3 },
-//   { name: 'Member9', sex: '여자', age: 29, value: 4 },
-//   { name: 'Member10', sex: '여자', age: 20, value: 0 },
-//   { name: 'Member11', sex: '여자', age: 21, value: 1 },
-//   { name: 'Member12', sex: '남자', age: 22, value: 2 },
-//   { name: 'Member13', sex: '남자', age: 23, value: 3 },
-//   { name: 'Member14', sex: '남자', age: 24, value: 4 },
-//   { name: 'Member15', sex: '남자', age: 25, value: 0 },
-//   { name: 'Member16', sex: '남자', age: 26, value: 1 },
-//   { name: 'Member17', sex: '남자', age: 27, value: 2 },
-//   { name: 'Member18', sex: '남자', age: 28, value: 3 },
-//   { name: 'Member19', sex: '남자', age: 29, value: 4 },
-//   { name: 'Member20', sex: '남자', age: 20, value: 0 },
-//   { name: 'Member21', sex: '남자', age: 21, value: 1 },
-//   { name: 'Member22', sex: '남자', age: 22, value: 2 },
-//   { name: 'Member23', sex: '남자', age: 23, value: 3 },
-//   { name: 'Member24', sex: '남자', age: 24, value: 4 },
-//   { name: 'Member25', sex: '남자', age: 25, value: 0 },
-//   { name: 'Member26', sex: '남자', age: 26, value: 1 },
-//   { name: 'Member27', sex: '남자', age: 27, value: 2 },
-//   { name: 'Member28', sex: '남자', age: 28, value: 3 },
-//   { name: 'Member29', sex: '남자', age: 29, value: 4 }
-// ]
-
-// 멤버 데이터 출력
-// console.log(dummyMembers)
-
-
-// 6개 팀으로 나누기
-const resultTeams = distributeTeamsBalanced(dummyMembers, 6);
-
-// 결과 확인 (콘솔)
-resultTeams.forEach((team, idx) => {
-  // 팀별 능력치 합계 계산
-  const totalAbility = team.reduce((sum, m) => sum + parseInt(m.value), 0);
-  const maleCount = team.filter((m) => m.sex === "남자").length;
-  const femaleCount = team.filter((m) => m.sex === "여자").length;
-  
-
-  console.log(`[Team ${idx + 1}] 총원:${team.length}명, 능력합:${totalAbility}, 남:${maleCount}/여:${femaleCount}`);
-});
+// [중요] 모듈 스코프 해결을 위한 전역 객체 할당
+// ===========================================================
+// HTML의 onclick="..." 속성이 이 함수들을 찾을 수 있게 window 객체에 등록합니다.
+window.mainFrm = mainFrm;
+window.sumCheckbox = sumCheckbox;
+window.addMember = addMember;
+window.modifyMember = modifyMember;
+window.delMember = delMember;

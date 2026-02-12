@@ -1,7 +1,6 @@
 //  bindDistributeEvents 가져오기
 import bindDistributeEvents from "../controller/bindDistributeEvents.js";
 
-
 // 가져온 것 테스트
 
 // ===========================================================
@@ -74,7 +73,7 @@ function mainFrm() {
       .join("");
 
     const app = document.getElementById("app");
-    
+
     // [수정] 결과가 나올 영역(div id="team-result-area")을 추가했습니다!
     app.innerHTML = `
             <table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
@@ -94,27 +93,46 @@ function mainFrm() {
                 </tbody>
             </table>
             <br>
-            <div class="controls">
+            
+            <div class="basic-controls" style="margin-bottom: 20px;">
                 <button onclick="addMember()">추가</button>
                 <button onclick="modifyMember()">수정</button>
                 <button onclick="delMember()">삭제</button>
-                <button id="btn-assign-teams" style="background-color: #e3f2fd; font-weight: bold; cursor: pointer;">
-                    ⚖️ 조건부 팀 배정
-                </button>
             </div>
+
+            <fieldset style="border: 2px solid #4a90e2; border-radius: 8px; padding: 15px; background-color: #f0f8ff;">
+                <legend style="font-weight: bold; color: #0044cc;">⚖️ 조건부 팀 배정 옵션</legend>
+                
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <label for="input-team-count"><strong>팀 개수:</strong></label>
+                        <input type="number" id="input-team-count" value="2" min="2" style="width: 50px; padding: 5px;">
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <strong>밸런스 기준:</strong>
+                        <label><input type="checkbox" id="chk-ability" checked> 💪 능력</label>
+                        <label><input type="checkbox" id="chk-gender" checked> 🚻 성별</label>
+                        <label><input type="checkbox" id="chk-age"> 🎂 나이</label>
+                    </div>
+
+                    <button id="btn-assign-teams" style="background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        팀 배정 실행 🚀
+                    </button>
+                </div>
+            </fieldset>
+
             <hr>
             <div id="team-result-area" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;"></div>
         `;
 
     // [핵심 수정] 화면을 그린 직후에, 팀 배정 버튼에 이벤트를 다시 연결해줍니다.
     bindDistributeEvents();
-
   } catch (error) {
     console.error("Error rendering main form:", error);
   }
 }
-
-
 
 /**
  * [함수: sumCheckbox]

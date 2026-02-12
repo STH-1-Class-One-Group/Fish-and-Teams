@@ -1,5 +1,6 @@
 //  bindDistributeEvents 가져오기
 import bindDistributeEvents from "../controller/bindDistributeEvents.js";
+import clickRandomTeamBtn from "../controller/clickRandomTeamBtn.js";
 import pressSpaceBar from "../controller/pressSpaceBar.js";
 
 // 가져온 것 테스트
@@ -102,7 +103,7 @@ function mainFrm() {
             </div>
 
             <fieldset style="border: 2px solid #4a90e2; border-radius: 8px; padding: 15px; background-color: #f0f8ff;">
-                <legend style="font-weight: bold; color: #0044cc;">⚖️ 조건부 팀 배정 옵션</legend>
+                <legend style="font-weight: bold; color: #0044cc;">⚖️ 팀 배정 옵션</legend>
                 
                 <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                     
@@ -118,9 +119,15 @@ function mainFrm() {
                         <label><input type="checkbox" id="chk-age"> 🎂 나이</label>
                     </div>
 
-                    <button id="btn-assign-teams" style="background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                        팀 배정 실행 🚀
-                    </button>
+                    <div style="display:flex; gap: 10px;">
+                        <button id="btn-assign-teams" style="background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                            ⚖️ 조건부 배정
+                        </button>
+                        
+                        <button id="btn-random-teams" style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                            🎲 랜덤 배정
+                        </button>
+                    </div>
                 </div>
             </fieldset>
 
@@ -129,7 +136,11 @@ function mainFrm() {
         `;
 
     // [핵심 수정] 화면을 그린 직후에, 팀 배정 버튼에 이벤트를 다시 연결해줍니다.
-    bindDistributeEvents();
+    // [이벤트 연결]
+    // 화면이 그려진 직후에 두 컨트롤러를 모두 실행해서 이벤트를 달아줍니다.
+    bindDistributeEvents(); // 기존 조건부 배정
+    clickRandomTeamBtn();   // [NEW] 랜덤 배정
+
   } catch (error) {
     console.error("Error rendering main form:", error);
   }
@@ -402,8 +413,7 @@ function startcurd() {
 startcurd();
 
 // pressSpaceBar 적용
-pressSpaceBar()
-
+pressSpaceBar();
 
 // [중요] 모듈 스코프 해결을 위한 전역 객체 할당
 // ===========================================================

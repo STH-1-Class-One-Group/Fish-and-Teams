@@ -13,7 +13,9 @@ const renderTeamResults = (teams) => {
       (sum, m) => sum + parseInt(m.value || 0),
       0,
     );
+        // 팀 능력 평균
     const avgAbility = (totalAbility / team.length).toFixed(1);
+    // 팀 나이 평균    
 
     // 팀 카드 (DIV) 생성
     const teamCard = document.createElement("div");
@@ -45,11 +47,12 @@ const renderTeamResults = (teams) => {
                 Team ${index + 1}
             </h3>
             <div style="font-size: 0.9em; color: blue; margin-bottom: 10px;">
-                👥 ${team.length}명 | 💪 평균: ${avgAbility}
+              💪 ${avgAbility} | 👥 ${team.length} 
             </div>
             <ul style="padding-left: 20px; margin: 0;">
                 ${memberListHTML}
             </ul>
+
         `;
 
     resultArea.appendChild(teamCard);

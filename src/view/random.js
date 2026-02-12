@@ -113,3 +113,40 @@ function generateTeamNames(count) {
 
     return names;
 }
+// 스네이크 드래프트 실제 로직 함수
+function executeSnakeDraft(teamCount) {
+    // 1. 로컬스토리지에서 명단 가져오기 (키 이름 통일)
+    const rawData = localStorage.getItem('teamMembers');
+    if (!rawData) {
+        alert("명단이 없습니다! 먼저 멤버를 추가해주세요.");
+        return [];
+    }
+    
+    let members = JSON.parse(rawData);
+    
+    // 2. 별점(grade) 또는 나이(age) 순으로 내림차순 정렬 (에이스부터 줄 세우기)
+    // 데이터에 grade가 없다면 기본값 0으로 처리
+    members.sort((a, b) => (b.grade || 0) - (a.grade || 0));
+
+    // 3. 빈 팀 배열 만들기
+    const teams = Array.from({ length: teamCount }, (_, i) => ({
+        teamName: String.fromCharCode(65 + i), // A, B, C...
+        members: []
+    }));
+
+    // 4. 스네이크(지그재그) 분배 핵심 로직
+    members.forEach((member, index) => {
+        const round = Math.floor(index / teamCount);
+        let teamIndex;
+
+        if (round % 2 === 0) {
+            teamIndex = index % teamCount; // 정방향
+        } else {
+            teamIndex = (teamCount - 1) - (index % teamCount); // 역방향
+        }
+        
+        teams[teamIndex].members.push(member);
+    });
+
+    return teams;
+}

@@ -3,12 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팀원 관리</title>
+    <title>팀원 관리 및 밸런스 배정</title>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        #random-image {
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            object-fit: cover;
+            border: 5px solid #fee500; /* 카카오 색상 포인트 */
+            transition: transform 0.2s;
+        }
+        #random-image:hover { transform: scale(1.05); }
+        .info { color: #666; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
     <h1>팀원 관리 시스템</h1>
+    <p class="info">이미지를 클릭하면 밸런스 있게 팀을 짜고 카톡으로 공유합니다.</p>
+    
     <div id="app"></div>
 
+    <hr>
+    
+    <div id="mock-test-area">
+        <img id="random-image" alt="팀 배정 시작하기">
+        <p><strong>위 이미지를 클릭하세요!</strong></p>
+    </div>
+
+    <script src="src/view/random.js"></script>
+    
     <script src="src/view/crud.js"></script>
+
+    <script src="kako.js"></script>
+
+    <script>
+        console.log("페이지 로드 시 window.Kakao 상태:", window.Kakao);
+
+        // 0. 카카오 SDK 초기화
+        try {
+            if (window.Kakao) {
+                if (!window.Kakao.isInitialized()) {
+                    window.Kakao.init('3bfa81a24c2b092a087abe2534be727f');
+                    console.log("카카오 SDK 초기화 완료.");
+                } else {
+                    console.log("카카오 SDK가 이미 초기화되어 있습니다.");
+                }
+            } else {
+                console.error("Kakao 객체를 찾을 수 없습니다. SDK 스크립트가 제대로 로드되었는지 확인하세요.");
+                alert("카카오 SDK 스크립트 로딩에 실패했습니다. 콘솔(F12)을 확인하여 네트워크 오류가 없는지 확인해주세요.");
+            }
+        } catch(e) {
+            console.error("카카오 SDK 초기화 중 예외 발생:", e);
+        }
+
+        // 1. 랜덤 이미지 초기화
+        const randomImage = document.getElementById('random-image');
+        if (randomImage) {
+            randomImage.src = 'https://picsum.photos/200?random=' + Math.random();
+        }
+
+        // 2. 이미지 클릭 시 통합 함수 실행
+        randomImage.addEventListener('click', () => {
+            // 원하는 팀 수를 설정 (예: 2팀)
+            const teamCount = 2; 
+
+            // 함수들이 로드되었는지 최종 확인 후 실행
+            if (typeof executeSnakeDraft === 'function' && typeof randomArrangeAndShare === 'function') {
+                console.log("배정 및 공유 프로세스 시작...");
+                randomArrangeAndShare(teamCount);
+            } else {
+                console.error("함수를 찾을 수 없습니다. 파일 경로와 로드 순서를 확인하세요.");
+                alert("스크립트 파일이 올바르게 로드되지 않았습니다. 콘솔(F12)을 확인해주세요.");
+            }
+        });
+    </script>
 </body>
 </html>

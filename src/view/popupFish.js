@@ -1,71 +1,90 @@
-// 스페이스 바를 클릭하게 되면
-// 팝업이 뜨는 로직
-const popupFish = () => {
-  // 50% 상수화
-  const HALF = "50%";
+// [수정 1] import 구문 삭제하고, 경로를 문자열로 직접 배열에 저장
+// 주의: 경로는 index.html 파일 기준으로 작성해야 합니다.
+// index.html이 최상위에 있고 img 폴더가 같은 위치에 있다면 "img/fish1.png"입니다.
+const fishArr = [
+  "img/fish1.png",
+  "img/fish2.png",
+  "img/fish3.png",
+  "img/fish4.png",
+  "img/fish5.png",
+  "img/fish6.png",
+];
 
-  // 우선 body 가져오기
+const popupFish = () => {
+  const HALF = "50%";
   const body = document.querySelector("body");
 
-  // body에 팝업 요소 넣기
+  // 1. 팝업 컨테이너 생성
   const popupFishElement = document.createElement("div");
 
   // 팝업 스타일 지정
   const popupFishElementStyle = (e) => {
-    // 팝업 크기 지정
-    // 가로 600px, 세로 400px
     e.style.width = "600px";
     e.style.height = "400px";
-
-    // 색깔 지정
+    // 이미지를 꽉 차게 보여주려면 flex나 background 설정을 추천하지만 일단 유지
+    e.style.display = "flex"; 
+    e.style.justifyContent = "center";
+    e.style.alignItems = "center";
+    
     e.style.backgroundColor = "#fff";
-
-    // 테두리 둥글기 지정
     e.style.borderRadius = "10px";
-
-    // 테두리 지정
     e.style.border = "3px solid #222";
-
-    // 포지션 fixed
     e.style.position = "fixed";
-
-    // 중앙 정렬
     e.style.left = HALF;
     e.style.top = HALF;
+    // 처음 위치 (약간 아래에서 시작)
     e.style.transform = `translate(-${HALF},-30%)`;
-    e.style.transition = "all 0.5s";
+    e.style.transition = "all 0.5s ease-out"; // 부드러운 감속 추가
+    e.style.zIndex = "10"; // 다른 요소 위에 뜨도록
   };
 
-  //  스타일 실행
   popupFishElementStyle(popupFishElement);
+
+  // 2. [중요 수정] 이미지 요소 '생성' 하기
+  // 기존 코드: document.querySelector("img") -> 이건 화면에 있는 엄한 이미지를 가져옵니다.
+  // 수정 코드: document.createElement("img") -> 새 이미지를 만들어야 합니다.
+  const fishImg = document.createElement("img");
+  
+  // 랜덤 인덱스 추출
+  const fishIndex = Math.floor(Math.random() * fishArr.length);
+  
+  // 이미지 경로 할당
+  fishImg.src = fishArr[fishIndex];
+  
+  // 이미지 크기 조절 (팝업 안에 예쁘게 들어가게)
+  fishImg.style.maxWidth = "90%";
+  fishImg.style.maxHeight = "90%";
+  fishImg.style.objectFit = "contain";
+
+  // 팝업에 이미지 넣기
+  popupFishElement.appendChild(fishImg);
 
   // body에 팝업 넣기
   body.appendChild(popupFishElement);
 
-  // 애니메이션이 등장하도록 함
-
+  // 3. 애니메이션 로직
   const spawnFish = (e) => {
-    // 움직이는 시간 지정
-    // 위치 지정
+    // 등장 위치 (중앙)
     e.style.transform = `translate(-${HALF},-${HALF})`;
+    e.style.opacity = "1";
 
     // 1초 뒤에 사라짐
-    setTimeout(()=>{
-
-        e.style.transform = `translate(-${HALF},-70%)`;
-        e.style.opacity = "0%"
-        setTimeout(()=>{
-
-            popupFishElement.remove()
-
-        },500)
-
-    },1000)
-
+    setTimeout(() => {
+      // 위로 올라가면서 사라지기
+      e.style.transform = `translate(-${HALF},-70%)`;
+      e.style.opacity = "0";
+      
+      // 애니메이션 시간(0.5s) 뒤에 요소 삭제
+      setTimeout(() => {
+        if (e.parentNode) { // 안전장치: 부모가 있을 때만 삭제
+            e.remove();
+        }
+      }, 500);
+    }, 1000);
   };
-  //   다음 프레임에 이펙트 연출
-  requestAnimationFrame(() => spawnFish(popupFishElement))
+
+  // 다음 프레임에 애니메이션 실행 (등장 효과)
+  requestAnimationFrame(() => spawnFish(popupFishElement));
 };
 
-// 출력
 export default popupFish;

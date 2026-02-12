@@ -1,3 +1,11 @@
+// distributeTeamsBalanced 가져오기
+import distributeTeamsBalanced from "../model/distributeTeamsBalanced.js";
+
+// 가져온 것 테스트
+
+
+
+
 // ===========================================================
 // 1. LocalStorage 폴리필 (Polyfill)
 // ===========================================================
@@ -378,3 +386,68 @@ function startcurd() {
 
 // 앱 시작
 startcurd();
+
+
+
+
+const dummyMembers = [];
+for (let i = 0; i < 30; i++) {
+  dummyMembers.push({
+    name: `Member${i}`,
+    sex: i < 12 ? "여자" : "남자", // 여자 12명, 남자 18명
+    age: 20 + (i % 10), // 20~29세
+    value: i % 5, // 능력치 0~4 골고루
+  });
+}
+
+// 임시 결과
+// [
+//   { name: 'Member0', sex: '여자', age: 20, value: 0 },
+//   { name: 'Member1', sex: '여자', age: 21, value: 1 },
+//   { name: 'Member2', sex: '여자', age: 22, value: 2 },
+//   { name: 'Member3', sex: '여자', age: 23, value: 3 },
+//   { name: 'Member4', sex: '여자', age: 24, value: 4 },
+//   { name: 'Member5', sex: '여자', age: 25, value: 0 },
+//   { name: 'Member6', sex: '여자', age: 26, value: 1 },
+//   { name: 'Member7', sex: '여자', age: 27, value: 2 },
+//   { name: 'Member8', sex: '여자', age: 28, value: 3 },
+//   { name: 'Member9', sex: '여자', age: 29, value: 4 },
+//   { name: 'Member10', sex: '여자', age: 20, value: 0 },
+//   { name: 'Member11', sex: '여자', age: 21, value: 1 },
+//   { name: 'Member12', sex: '남자', age: 22, value: 2 },
+//   { name: 'Member13', sex: '남자', age: 23, value: 3 },
+//   { name: 'Member14', sex: '남자', age: 24, value: 4 },
+//   { name: 'Member15', sex: '남자', age: 25, value: 0 },
+//   { name: 'Member16', sex: '남자', age: 26, value: 1 },
+//   { name: 'Member17', sex: '남자', age: 27, value: 2 },
+//   { name: 'Member18', sex: '남자', age: 28, value: 3 },
+//   { name: 'Member19', sex: '남자', age: 29, value: 4 },
+//   { name: 'Member20', sex: '남자', age: 20, value: 0 },
+//   { name: 'Member21', sex: '남자', age: 21, value: 1 },
+//   { name: 'Member22', sex: '남자', age: 22, value: 2 },
+//   { name: 'Member23', sex: '남자', age: 23, value: 3 },
+//   { name: 'Member24', sex: '남자', age: 24, value: 4 },
+//   { name: 'Member25', sex: '남자', age: 25, value: 0 },
+//   { name: 'Member26', sex: '남자', age: 26, value: 1 },
+//   { name: 'Member27', sex: '남자', age: 27, value: 2 },
+//   { name: 'Member28', sex: '남자', age: 28, value: 3 },
+//   { name: 'Member29', sex: '남자', age: 29, value: 4 }
+// ]
+
+// 멤버 데이터 출력
+// console.log(dummyMembers)
+
+
+// 6개 팀으로 나누기
+const resultTeams = distributeTeamsBalanced(dummyMembers, 6);
+
+// 결과 확인 (콘솔)
+resultTeams.forEach((team, idx) => {
+  // 팀별 능력치 합계 계산
+  const totalAbility = team.reduce((sum, m) => sum + parseInt(m.value), 0);
+  const maleCount = team.filter((m) => m.sex === "남자").length;
+  const femaleCount = team.filter((m) => m.sex === "여자").length;
+  
+
+  console.log(`[Team ${idx + 1}] 총원:${team.length}명, 능력합:${totalAbility}, 남:${maleCount}/여:${femaleCount}`);
+});

@@ -7,6 +7,15 @@
 }
 
 
+
+/* 버튼 속성 지정 */
+button {
+
+    /* 컬러 지정 */
+    color : #fff;
+
+}
+
 /* 스크롤바의 폭 너비 */
 .scrollbar::-webkit-scrollbar {
     width: 6px;  
@@ -53,7 +62,6 @@ header {
     border-radius: 20px; 
     background-color: #fff; 
     border: 1px solid #3372FF; 
-    color: #3372FF !important; 
     font-weight: 600;
 }
 

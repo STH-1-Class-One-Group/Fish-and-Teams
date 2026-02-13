@@ -37,7 +37,7 @@ function renderTeamResults(teams) {
 
         teamCard.innerHTML = `
             <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:0;">Team ${index + 1}</h3>
-            <div style="color:blue; margin-bottom:10px; font-weight:bold;">
+            <div style="color:blue; margin:10px 0px; font-weight:bold;">
                 👥 ${team.length}명 | 💪 평균: ${avgAbility}
             </div>
             <ul style="list-style:none; padding:0;">${memberListHTML}</ul>

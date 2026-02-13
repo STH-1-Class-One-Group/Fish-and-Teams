@@ -51,29 +51,21 @@ body {
     width: 100%;
     height: 100%;
     position: relative;
-    /* 배경 하늘색 그라데이션 */
     background: linear-gradient(to bottom, #C7E0FD 0%, #C7E0FD 35%, #01579b 55%, #01579b 100%);
     overflow: hidden;
 }
 
-/* [4] ★ 통합 바다 시스템 (이 레이어를 움직여서 위치 조절) ★ */
+/* [4] ★ 통합 바다 시스템 ★ */
 .ocean-wrapper {
     position: absolute;
-    top: 65%;
-    /* 🌊 바다 전체 높이: 이 수치를 조절하세요 (예: 60% ~ 80%) */
+    top: 68%;
+    /* 바다 위치를 살짝 내려 안정감을 줌 */
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 50;
-}
-
-.wave-foreground {
-    z-index: 200;
-    /* 배보다 앞에 오는 파도 레이어 */
-    position: absolute;
-    top: 0;
-    width: 100%;
-    pointer-events: none;
+    /* 바다가 처음 나타날 때 쫀득하게 올라오는 효과 */
+    animation: sea-entrance 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .wave-canvas {
@@ -81,48 +73,53 @@ body {
     width: 300vw;
     height: 300vw;
     left: -100vw;
-    border-radius: 47%;
-    /* 자글자글한 물결 굴곡 */
+    border-radius: 48%;
+    /* 굴곡을 더 둥글게 해서 자바스크립트 곡선과 비슷하게 조절 */
     transform-origin: 50% 50%;
-    /* 애니메이션에서 scaleY(0.2)로 납작하게 눌러 잔잔함 유지 */
-    animation: wave-rotate 12s infinite linear;
+
+    /* 회전(linear)과 물리적 수축(elastic) 두 가지를 겹칩니다 */
+    animation:
+        wave-rotate 15s infinite linear,
+        wave-elastic 6s infinite ease-in-out;
 }
 
 .wave-canvas.-one {
     background: #4fc3f7;
-    top: 10px;
+    top: 12px;
     opacity: 0.5;
-    animation-duration: 15s;
+    animation-duration: 12s, 5s;
+    /* 각 파도마다 탄성 주기를 다르게 설정 */
 }
 
 .wave-canvas.-two {
     background: #0670d3;
-    top: 5px;
+    top: 6px;
     opacity: 0.4;
-    animation-duration: 20s;
-    animation-direction: reverse;
+    animation-duration: 18s, 7s;
+    animation-direction: reverse, alternate;
 }
 
 .wave-canvas.-three {
     background: #012d50;
     top: 0px;
     opacity: 0.3;
-    animation-duration: 25s;
+    animation-duration: 22s, 9s;
 }
 
-/* [5] 배 설정 - 둥실둥실 애니메이션 */
+/* [5] 배 설정 - 물리적 가속도 적용 */
 .boat-container {
     position: absolute;
-    top: 65%;
-    /* ⛵ 배 위치: .ocean-wrapper의 top과 똑같이 맞추세요 */
+    top: 68%;
+    /* 바다 위치와 동일하게 동기화 */
     left: 50%;
     width: 480px;
     height: 320px;
     z-index: 150;
-    /* 파도 레이어들 사이에 위치 */
-    animation: boat-bobbing 3s ease-in-out infinite;
+    /* cubic-bezier를 사용해 배가 정점에서 머무는 물리적 관성을 표현 */
+    animation: boat-physics-bobbing 3.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 }
 
+/* ... 낚싯줄 및 물고기 코드는 동일 ... */
 .fishing-line {
     position: absolute;
     width: 4px;
@@ -151,7 +148,6 @@ body {
     animation: struggle 0.2s infinite;
 }
 
-/* [6] 결과창 */
 #game-result-overlay {
     display: none;
     position: absolute;
@@ -168,27 +164,56 @@ body {
 
 /* [7] 애니메이션 정의 */
 
-/* 파도 회전 및 압축 (잔잔한 물결의 핵심) */
+/* 1. 회전 */
 @keyframes wave-rotate {
     from {
-        transform: rotate(0deg) scaleY(0.2);
+        transform: rotate(0deg);
     }
 
     to {
-        transform: rotate(360deg) scaleY(0.2);
+        transform: rotate(360deg);
     }
 }
 
-/* 배 둥실둥실 (상하 이동 + 미세 회전) */
-@keyframes boat-bobbing {
+/* 2. 탄성 효과 (JS의 스프링 물리 흉내) */
+/* 파도가 회전하면서 실시간으로 좌우/상하로 미세하게 늘어납니다 */
+@keyframes wave-elastic {
 
     0%,
     100% {
-        transform: translate(-50%, -88%) rotate(-1.5deg);
+        transform: scaleY(0.18) scaleX(1);
     }
 
     50% {
-        transform: translate(-50%, -102%) rotate(2deg);
+        transform: scaleY(0.24) scaleX(1.02);
+    }
+}
+
+/* 3. 배의 물리적 둥실거림 */
+@keyframes boat-physics-bobbing {
+
+    0%,
+    100% {
+        /* 하단 정점에서 반동 */
+        transform: translate(-50%, -86%) rotate(-1.2deg);
+    }
+
+    50% {
+        /* 상단 정점에서 관성으로 인한 멈춤과 기우뚱 */
+        transform: translate(-50%, -104%) rotate(2.5deg);
+    }
+}
+
+/* 4. 초기 등장 반동 */
+@keyframes sea-entrance {
+    from {
+        transform: translateY(150px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
 

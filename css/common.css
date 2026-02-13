@@ -61,6 +61,7 @@ header {
 .select-theme {
     list-style: none;
     width: 80px;
+    position: relative;
 }
 
 /* Theme 버튼 스타일 */
@@ -92,12 +93,22 @@ header {
 /* 슬라이드 대상이 되는 UL */
 .theme-list {
     list-style: none;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 100%;
     padding: 0;
     margin: 0;
     overflow: hidden;
-    max-height: 0; /* 처음에는 숨김 */
-    transition: max-height 0.3s ease-out; /* 슬라이드 애니메이션 */
-    background-color: #f9f9f9;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease-out; /* 슬라이드 애니메이션 */
+    background-color: #FFFFFF;
+    border: 1px solid #ddd;
+}
+
+.theme-list > li:not(:last-child) {
+    border-bottom: 1px solid #ddd;
 }
 
 /* UL 내부 버튼들 */
@@ -123,7 +134,6 @@ main {
 }
 .container { width: 960px; padding: 60px 0; }
 section { 
-    border: 1px solid #3372FF;
     border-radius: 12px;
     padding: 20px;
 }
@@ -175,30 +185,6 @@ h2 {
     display: flex; align-items: center; justify-content: center;
     border-radius: 18px;
     font-weight: 600;
-}
-.crud-btn.blue {
-    border: 2px solid #3372FF;
-    color: #3372FF !important;
-}
-.crud-btn.blue:hover {
-    background-color: #3372FF;
-    color: #FFFFFF !important;
-}
-.crud-btn.gray {
-    border: 2px solid #8895A0;
-    color: #8895A0 !important;
-}
-.crud-btn.gray:hover {
-    background-color: #8895A0;
-    color: #FFFFFF !important;
-}   
-.crud-btn.red {
-    border: 2px solid #FF4D4D;
-    color: #FF4D4D !important;
-}
-.crud-btn.red:hover {
-    background-color: #FF4D4D;
-    color: #FFFFFF !important;
 }
 /* ==== Footer ===== */
 footer { 

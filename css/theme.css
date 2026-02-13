@@ -5,7 +5,36 @@
 .light * {
     color: #333333; 
 }
-
+section { 
+    border: 1px solid #3372FF;
+}
+.light  .crud-btn {
+    background-color: #FFFFFF;
+}
+.light .crud-btn.blue {
+    border: 2px solid #3372FF;
+    color: #3372FF !important;
+}
+.light .crud-btn.blue:hover {
+    background-color: #3372FF;
+    color: #FFFFFF !important;
+}
+.light .crud-btn.gray {
+    border: 2px solid #8895A0;
+    color: #8895A0 !important;
+}
+.light .crud-btn.gray:hover {
+    background-color: #8895A0;
+    color: #FFFFFF !important;
+}   
+.light .crud-btn.red {
+    border: 2px solid #FF4D4D;
+    color: #FF4D4D !important;
+}
+.light .crud-btn.red:hover {
+    background-color: #FF4D4D;
+    color: #FFFFFF !important;
+}
 
 /* ===== Dark ===== */
 .dark { 

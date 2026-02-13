@@ -2,6 +2,14 @@
 import bindDistributeEvents from "../controller/bindDistributeEvents.js";
 import clickRandomTeamBtn from "../controller/clickRandomTeamBtn.js";
 import pressSpaceBar from "../controller/pressSpaceBar.js";
+import toggleThemeDropdown from "./toggleThemeDropdown.js";
+import selectTheme from "./selectTheme.js";
+
+// 테마 선택 기능 초기화
+selectTheme();
+// 테마 드롭다운 토글 기능 초기화
+toggleThemeDropdown();
+
 
 // 가져온 것 테스트
 

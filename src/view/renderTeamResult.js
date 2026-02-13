@@ -1,115 +1,55 @@
+import popupFish from "./popupFish.js"; // 사이드 이펙트용 import
+
 /**
  * [함수: renderTeamResults]
- * 역할: 계산된 팀 배열(2차원 배열)을 예쁜 카드 형태로 화면에 뿌려줍니다.
+ * 역할: 결과를 HTML에 그리고, 낚시 게임을 트리거합니다.
  */
-const renderTeamResults = (teams) => {
-  const resultArea = document.getElementById("team-result-area");
-  resultArea.innerHTML = ""; // 기존 결과 초기화
+function renderTeamResults(teams) {
+  // 1. 결과 영역에 데이터 그리기 (일단 그려두고 나중에 팝업으로 띄움)
+  const resultArea = document.getElementById("team-result-content"); // ID 변경됨 주의
+  if(resultArea) {
+      resultArea.innerHTML = "";
+      
+      teams.forEach((team, index) => {
+        // 평균 능력치 계산
+        const totalAbility = team.reduce((sum, m) => sum + parseInt(m.value || 0), 0);
+        const avgAbility = (totalAbility / team.length).toFixed(1);
+        
+        // 카드 생성
+        const teamCard = document.createElement("div");
+        teamCard.className = "team-result-card";
+        teamCard.style.border = "2px solid #333";
+        teamCard.style.borderRadius = "10px";
+        teamCard.style.padding = "15px";
+        teamCard.style.margin = "10px";
+        teamCard.style.background = "#fff";
+        teamCard.style.boxShadow = "3px 3px 10px rgba(0,0,0,0.1)";
+        teamCard.style.width = "calc(50% - 20px)"; // 2열 배치
 
-  // 팀의 성별 지정
-
-  const teamSexRatio = {
-    // 남자수
-    male: 0,
-    // 여자수
-    female: 0,
-  };
-
-  // 각 팀을 순회하며 HTML 생성
-  teams.forEach((team, index) => {
-    // 팀별 통계 계산 (보너스)
-
-    // 능력
-    const totalAbility = team.reduce(
-      (sum, m) => sum + parseInt(m.value || 0),
-      0,
-    );
-
-    // 나이
-    const totalAge = team.reduce((sum, m) => sum + parseInt(m.age || 0), 0);
-
-    // 성별 비율 지정
-    team.forEach((m) => {
-      // 만약에 element에서
-      // sex가 male이면
-      if (m.sex === "남자") {
-        teamSexRatio.male += 1;
-      }
-      // female이면
-      else if (m.sex === "여자") {
-        teamSexRatio.female += 1;
-      }
-      // 그 외에는 console로 띄움
-      else {
-        console.log(`남자 아니면 여자여야 합니다. ${m.sex}`);
-      }
-    });
-
-    console.log(teamSexRatio);
-
-    // 팀 능력 평균
-    const avgAbility = (totalAbility / team.length).toFixed(1);
-    // 팀 나이 평균
-    const avgAge = (totalAge / team.length).toFixed(1);
-
-    // 팀 카드 (DIV) 생성
-    const teamCard = document.createElement("div");
-    teamCard.className = "team-card";
-    // 스타일은 CSS로 빼도 되지만, 편의상 여기에 적습니다.
-    teamCard.style.border = "2px solid #333";
-    teamCard.style.borderRadius = "8px";
-    teamCard.style.padding = "15px";
-    teamCard.style.minWidth = "200px";
-    teamCard.style.backgroundColor = "#fff";
-    teamCard.style.boxShadow = "3px 3px 5px rgba(0,0,0,0.1)";
-
-    // 카드 내용 작성
-    let memberListHTML = team
-      .map(
-        (m) => `
-            <li style="margin-bottom: 4px;">
+        let memberListHTML = team.map(m => `
+            <li style="margin: 5px 0;">
                 <strong>${m.name}</strong> 
-                <span style="font-size:0.8em; color:#666;">
-                    (${m.age}세, ${m.sex}, ⭐${parseInt(m.value) + 1})
+                <span style="color:#666; font-size:0.9em;">
+                    (${m.age}세, ${m.sex}, ⭐${parseInt(m.value)+1})
                 </span>
             </li>
-        `,
-      )
-      .join("");
-// 남자 여자 성비 추가(텍스트 붙여보는 것은 재형님에게 추가로 물어보는 것으로)
-    teamCard.innerHTML = `
-            <h3 style="margin-top:0; border-bottom:1px solid #ddd; padding-bottom:5px;">
-                Team ${index + 1}
-            </h3>
-            <div style="font-size: 0.9em; color: blue; margin-bottom: 10px;">
-            👥 ${team.length} |  💪 ${avgAbility} | 🚻  남자 ${teamSexRatio.male} : 여자 ${teamSexRatio.female} |  🎂 ${avgAge}
+        `).join('');
+
+        teamCard.innerHTML = `
+            <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:0;">Team ${index + 1}</h3>
+            <div style="color:blue; margin-bottom:10px; font-weight:bold;">
+                👥 ${team.length}명 | 💪 평균: ${avgAbility}
             </div>
-            <ul style="padding-left: 20px; margin: 0;">
-                ${memberListHTML}
-            </ul>
-
+            <ul style="list-style:none; padding:0;">${memberListHTML}</ul>
         `;
-
-    resultArea.appendChild(teamCard);
-
-    // 초기화화화
-    teamSexRatio.female = 0;
-      teamSexRatio.male = 0
-  });
-
-  // ----------------------------------------------------
-  // [NEW] ★ 낚시 게임 자동 시작 연결! ★
-  // index.html에 만들어둔 전역 함수(window.startFishingGame)를 호출합니다.
-  // ----------------------------------------------------
-  if (typeof window.startFishingGame === "function") {
-    // 약간의 딜레이를 주어 사용자가 "배정 완료" 느낌을 받게 함
-    setTimeout(() => {
-        if(confirm("팀 배정이 완료되었습니다! 🎣 낚시 게임으로 결과를 확인하시겠습니까?")) {
-            window.startFishingGame(teams);
-        }
-    }, 100);
+        resultArea.appendChild(teamCard);
+      });
   }
 
-};
+  // 2. [수정] 알림 없이 바로 낚시 게임 시작
+  if (typeof window.startFishingGame === "function") {
+      window.startFishingGame(teams);
+  }
+}
 
 export default renderTeamResults;

@@ -47,131 +47,80 @@ body {
     background: white;
 }
 
-.swiper {
-    width: 100%;
-    height: 100%;
-}
-
 .game-screen {
     width: 100%;
     height: 100%;
     position: relative;
+    /* 배경 하늘색 그라데이션 */
     background: linear-gradient(to bottom, #C7E0FD 0%, #C7E0FD 35%, #01579b 55%, #01579b 100%);
     overflow: hidden;
 }
 
-
-/* [4] 물결 레이어 시스템 - 파도 폭을 완만하게 수정 */
-.wave-background,
-.wave-foreground {
+/* [4] ★ 통합 바다 시스템 (이 레이어를 움직여서 위치 조절) ★ */
+.ocean-wrapper {
     position: absolute;
-    top: 45%;
-    /* 배의 위치와 맞춤 */
+    top: 65%;
+    /* 🌊 바다 전체 높이: 이 수치를 조절하세요 (예: 60% ~ 80%) */
+    left: 0;
     width: 100%;
     height: 100%;
-}
-
-.wave-background {
     z-index: 50;
 }
 
 .wave-foreground {
     z-index: 200;
+    /* 배보다 앞에 오는 파도 레이어 */
+    position: absolute;
+    top: 0;
+    width: 100%;
     pointer-events: none;
 }
 
-/*--- 사각형으로 물결 표현 ---*/
 .wave-canvas {
     position: absolute;
-    /* 500은 너무 완만하고 100은 잘리므로 250~300이 적당합니다 */
-    width: 180vw;
-    height: 280vw;
-    left: -90vw;
-    /* 중앙 정렬을 위해 (width - 100) / 2 만큼 왼쪽으로 */
-
-    /* [포인트] 비대칭 곡선으로 라면 같은 굴곡 생성 */
-    border-radius: 30% 70% 35% 65% / 65% 35% 70% 30%;
-
-    transform-origin: 50% 40%;
-    /* 중심축을 살짝 위로 올려 회전 반경에 변화 부여 */
-    animation: wave-rotate 5s infinite linear;
-
+    width: 300vw;
+    height: 300vw;
+    left: -100vw;
+    border-radius: 47%;
+    /* 자글자글한 물결 굴곡 */
+    transform-origin: 50% 50%;
+    /* 애니메이션에서 scaleY(0.2)로 납작하게 눌러 잔잔함 유지 */
+    animation: wave-rotate 12s infinite linear;
 }
 
 .wave-canvas.-one {
-    top: 15px;
+    background: #4fc3f7;
+    top: 10px;
     opacity: 0.5;
-    animation-duration: 7s;
+    animation-duration: 15s;
 }
 
 .wave-canvas.-two {
-    top: 10px;
+    background: #0670d3;
+    top: 5px;
     opacity: 0.4;
-    left: -110vw;
-    /* 위치를 비틀어서 물결이 엇갈리게 */
-    animation-duration: 10s;
+    animation-duration: 20s;
     animation-direction: reverse;
 }
 
-
 .wave-canvas.-three {
     background: #012d50;
-    opacity: 0.3;
     top: 0px;
+    opacity: 0.3;
+    animation-duration: 25s;
 }
 
-
-/* [5] 배 설정 - 확실한 둥실둥실 애니메이션 */
+/* [5] 배 설정 - 둥실둥실 애니메이션 */
 .boat-container {
     position: absolute;
-    top: 45%;
+    top: 65%;
+    /* ⛵ 배 위치: .ocean-wrapper의 top과 똑같이 맞추세요 */
     left: 50%;
-    /* 기본 정렬은 -50%만 유지하고, 상하 이동은 애니메이션에서 처리 */
-    transform: translateX(-50%);
     width: 480px;
     height: 320px;
     z-index: 150;
-    /* 2.5초 주기로 조금 더 빠르게 움직이도록 설정 */
-    animation: boat-bobbing 2.5s ease-in-out infinite;
-}
-
-/* [6] 애니메이션 정의 - 확실한 움직임 부여 */
-
-/* 파도 회전 애니메이션 (기존 유지) */
-@keyframes wave-rotate {
-    from {
-        transform: rotate(0deg) scaleY(0.7);
-    }
-
-    to {
-        transform: rotate(360deg) scaleY(0.7);
-    }
-}
-
-/* 배 둥실둥실 (위아래로 약 20px 이동 + 좌우 3도 회전) */
-@keyframes boat-bobbing {
-
-    0%,
-    100% {
-        /* 처음 위치: 살짝 아래, 정방향 */
-        transform: translate(-50%, -85%) rotate(0deg);
-    }
-
-    50% {
-        /* 중간 위치: 위로 훅 올라가며 살짝 기울어짐 */
-        transform: translate(-50%, -105%) rotate(3deg);
-    }
-}
-
-/* 물고기 퍼덕거림 (기존 유지) */
-@keyframes struggle {
-    0% {
-        transform: rotate(-10deg);
-    }
-
-    100% {
-        transform: rotate(10deg);
-    }
+    /* 파도 레이어들 사이에 위치 */
+    animation: boat-bobbing 3s ease-in-out infinite;
 }
 
 .fishing-line {
@@ -202,7 +151,7 @@ body {
     animation: struggle 0.2s infinite;
 }
 
-/* [6] 결과창 및 애니메이션 정의 */
+/* [6] 결과창 */
 #game-result-overlay {
     display: none;
     position: absolute;
@@ -217,27 +166,29 @@ body {
     z-index: 10001;
 }
 
-/* 파도 회전 애니메이션 */
+/* [7] 애니메이션 정의 */
+
+/* 파도 회전 및 압축 (잔잔한 물결의 핵심) */
 @keyframes wave-rotate {
     from {
-        transform: rotate(0deg);
+        transform: rotate(0deg) scaleY(0.2);
     }
 
     to {
-        transform: rotate(360deg);
+        transform: rotate(360deg) scaleY(0.2);
     }
 }
 
-/* 배 둥실둥실 애니메이션 (위아래 이동 + 미세한 회전) */
+/* 배 둥실둥실 (상하 이동 + 미세 회전) */
 @keyframes boat-bobbing {
 
     0%,
     100% {
-        transform: translate(-50%, -90%) rotate(0deg);
+        transform: translate(-50%, -88%) rotate(-1.5deg);
     }
 
     50% {
-        transform: translate(-50%, -96%) rotate(1.5deg);
+        transform: translate(-50%, -102%) rotate(2deg);
     }
 }
 

@@ -60,6 +60,7 @@ body {
     overflow: hidden;
 }
 
+
 /* [4] 물결 레이어 시스템 - 파도 폭을 완만하게 수정 */
 .wave-background,
 .wave-foreground {
@@ -79,38 +80,46 @@ body {
     pointer-events: none;
 }
 
-/* [4] 물결 레이어 시스템 - 파도 폭 최소화 (잔물결) */
+/*--- 사각형으로 물결 표현 ---*/
 .wave-canvas {
     position: absolute;
-    /* 폭을 줄이기 위해 크기 대폭 확대 (회전 반경을 넓게 해서 완만하게 만듦) */
-    width: 500vw;
-    height: 500vw;
-    left: -200vw;
-    /* 50%에 가까울수록 원형이 되어 파도가 거의 안 느껴지므로 48%로 설정 */
-    border-radius: 48%;
-    transform-origin: 50% 50%;
-    animation: wave-rotate 15s infinite linear;
+    /* 500은 너무 완만하고 100은 잘리므로 250~300이 적당합니다 */
+    width: 180vw;
+    height: 280vw;
+    left: -90vw;
+    /* 중앙 정렬을 위해 (width - 100) / 2 만큼 왼쪽으로 */
+
+    /* [포인트] 비대칭 곡선으로 라면 같은 굴곡 생성 */
+    border-radius: 30% 70% 35% 65% / 65% 35% 70% 30%;
+
+    transform-origin: 50% 40%;
+    /* 중심축을 살짝 위로 올려 회전 반경에 변화 부여 */
+    animation: wave-rotate 5s infinite linear;
+
 }
 
 .wave-canvas.-one {
-    background: #4fc3f7;
+    top: 15px;
     opacity: 0.5;
-    top: -10px;
+    animation-duration: 7s;
 }
 
 .wave-canvas.-two {
-    background: #0670d3;
-    opacity: 0.5;
-    top: -5px;
+    top: 10px;
+    opacity: 0.4;
+    left: -110vw;
+    /* 위치를 비틀어서 물결이 엇갈리게 */
+    animation-duration: 10s;
     animation-direction: reverse;
-    animation-duration: 20s;
 }
+
 
 .wave-canvas.-three {
     background: #012d50;
     opacity: 0.3;
     top: 0px;
 }
+
 
 /* [5] 배 설정 - 확실한 둥실둥실 애니메이션 */
 .boat-container {
@@ -128,14 +137,14 @@ body {
 
 /* [6] 애니메이션 정의 - 확실한 움직임 부여 */
 
-/* 파도 회전 (기존 유지) */
+/* 파도 회전 애니메이션 (기존 유지) */
 @keyframes wave-rotate {
     from {
-        transform: rotate(0deg);
+        transform: rotate(0deg) scaleY(0.7);
     }
 
     to {
-        transform: rotate(360deg);
+        transform: rotate(360deg) scaleY(0.7);
     }
 }
 

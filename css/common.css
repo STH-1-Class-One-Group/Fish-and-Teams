@@ -39,7 +39,7 @@ header {
 }
 .logo { height: 50px; }
 .logo > a { display: block; height: 100%; }
-.logo > a > img { height: 100%; width: auto; }
+.logo img { height: 100%; width: auto; }
 
 .header-btn-area {
     display: flex;
@@ -123,7 +123,6 @@ main {
 }
 .container { width: 960px; padding: 60px 0; }
 .section { 
-    background: rgba(255, 255, 255, 0.6);
     border: 1px solid #3372FF;
     border-radius: 12px;
     padding: 20px;
@@ -136,6 +135,13 @@ h2 {
 }
 .table {
     border-top: 2px solid #3372FF;
+}
+.table-info {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
 }
 .table-row {
     height: 44px;
@@ -154,7 +160,46 @@ h2 {
 .table-data { border-bottom: 1px solid #454f57; max-height: 240px; overflow-y: auto; }
 .table-data-list { border-bottom: 1px solid #E3E9ED; }
 
-
+.crud-btn-area {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.crud-btn {
+    cursor: pointer;
+    transition: all 0.3s;
+    height: 32px; 
+    padding: 0 14px; 
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 18px;
+    font-weight: 600;
+}
+.crud-btn.blue {
+    border: 2px solid #3372FF;
+    color: #3372FF !important;
+}
+.crud-btn.blue:hover {
+    background-color: #3372FF;
+    color: #FFFFFF !important;
+}
+.crud-btn.gray {
+    border: 2px solid #8895A0;
+    color: #8895A0 !important;
+}
+.crud-btn.gray:hover {
+    background-color: #8895A0;
+    color: #FFFFFF !important;
+}   
+.crud-btn.red {
+    border: 2px solid #FF4D4D;
+    color: #FF4D4D !important;
+}
+.crud-btn.red:hover {
+    background-color: #FF4D4D;
+    color: #FFFFFF !important;
+}
 /* ==== Footer ===== */
 footer { 
     height: 160px;

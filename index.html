@@ -1,84 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팀원 관리 및 밸런스 배정</title>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"></script>
+    <title>팀원 관리 시스템</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        #random-image {
-            border-radius: 50%;
-            width: 200px;
-            height: 200px;
-            cursor: pointer;
-            object-fit: cover;
-            border: 5px solid #fee500; /* 카카오 색상 포인트 */
-            transition: transform 0.2s;
+        /* CSS 파일이 안 읽힐 경우를 대비한 최소한의 안전장치 */
+        #minigame-overlay {
+            display: none;
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999;
+            background: white;
         }
-        #random-image:hover { transform: scale(1.05); }
-        .info { color: #666; margin-bottom: 20px; }
     </style>
 </head>
+
 <body>
     <h1>팀원 관리 시스템</h1>
-    <p class="info">이미지를 클릭하면 밸런스 있게 팀을 짜고 카톡으로 공유합니다.</p>
-    
     <div id="app"></div>
 
-    <hr>
-    
-    <div id="mock-test-area">
-        <img id="random-image" alt="팀 배정 시작하기">
-        <p><strong>위 이미지를 클릭하세요!</strong></p>
+    <div id="detail-config-box">
+        <div class="config-row">
+            <label>팀 수</label>
+            <input type="number" id="detail-team-count" value="2" min="2" style="width: 100px;">
+        </div>
+        <div class="btn-group">
+            <button onclick="startMiniGame()">A</button>
+            <button onclick="startMiniGame()">B</button>
+        </div>
     </div>
 
-    <script src="src/view/random.js"></script>
-    
-    <script src="src/view/crud.js"></script>
+    <div id="minigame-overlay">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper" id="game-screens-wrapper"></div>
+        </div>
 
+        <div id="game-result-overlay">
+            <h3 style="margin-top: 0;">🎣 만선 완료!</h3>
+            <button class="kakao-share-btn" onclick="directKakaoShare()">카카오톡 결과 공유</button>
+            <button onclick="closeGame()"
+                style="margin-top:15px; background:none; border:none; color:#999; text-decoration:underline; cursor:pointer;">창
+                닫기</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="src/view/random.js"></script>
+    <script src="src/view/crud.js"></script>
     <script src="kako.js"></script>
 
     <script>
-        console.log("페이지 로드 시 window.Kakao 상태:", window.Kakao);
+        /* [Personalization] 간결한 핵심 로직 유지 */
+        let gameData = {
+            teams: [],
+            currentSwiper: null,
+            isFishing: false,
+            totalFished: 0,
+            totalMembers: 0
+        };
 
-        // 0. 카카오 SDK 초기화
-        try {
-            if (window.Kakao) {
-                if (!window.Kakao.isInitialized()) {
-                    window.Kakao.init('3bfa81a24c2b092a087abe2534be727f');
-                    console.log("카카오 SDK 초기화 완료.");
-                } else {
-                    console.log("카카오 SDK가 이미 초기화되어 있습니다.");
-                }
-            } else {
-                console.error("Kakao 객체를 찾을 수 없습니다. SDK 스크립트가 제대로 로드되었는지 확인하세요.");
-                alert("카카오 SDK 스크립트 로딩에 실패했습니다. 콘솔(F12)을 확인하여 네트워크 오류가 없는지 확인해주세요.");
+        function startMiniGame() {
+            const teamCount = parseInt(document.getElementById('detail-team-count').value);
+            const members = JSON.parse(localStorage.getItem('teamMembers')) || [];
+
+            if (members.length < teamCount) {
+                alert("인원이 부족합니다!");
+                return;
             }
-        } catch(e) {
-            console.error("카카오 SDK 초기화 중 예외 발생:", e);
+
+            gameData.totalMembers = members.length;
+            gameData.totalFished = 0;
+            // random.js의 로직 사용
+            gameData.teams = executeSnakeDraft(teamCount);
+
+            renderGameScreens();
+
+            document.getElementById('minigame-overlay').style.display = 'block';
+
+            // 슬라이드가 나열되는 현상 방지를 위해 다시 초기화
+            if (gameData.currentSwiper) gameData.currentSwiper.destroy();
+            gameData.currentSwiper = new Swiper(".mySwiper", {
+                allowTouchMove: false,
+                observer: true,
+                observeParents: true
+            });
         }
 
-        // 1. 랜덤 이미지 초기화
-        const randomImage = document.getElementById('random-image');
-        if (randomImage) {
-            randomImage.src = 'https://picsum.photos/200?random=' + Math.random();
+        function renderGameScreens() {
+            const wrapper = document.getElementById('game-screens-wrapper');
+            wrapper.innerHTML = gameData.teams.map((team, idx) => {
+                const fishermanImg = (idx % 2 === 0) ? '1' : '2';
+                return `
+                <div class="swiper-slide">
+                    <div class="game-screen">
+                        <div class="team-info">
+                            <h2>${team.teamName}</h2>
+                            <div class="record-box" id="record-${idx}">대기 중...</div>
+                        </div>
+                        <div class="wave-background"><div class="wave-canvas -three"></div></div>
+                        <div class="boat-container">
+                            <img src="images/fishing_${fishermanImg}.svg" class="fisherman" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjQwIiByPSIyMCIvPjxwYXRoIGQ9Ik0zMCA3MCBMNzAgNzAgTDgwIDEwMCBMMjAgMTAwIFoiLz48L3N2Zz4=';">
+                            <div class="boat"></div>
+                            <div class="fishing-line line-style-${idx % 2}" id="line-${idx}">
+                                <div class="float" style="position:absolute; bottom:-10px; left:-6px; width:16px; height:16px; background:red; border-radius:50%;"></div>
+                                <div class="fish">🐟</div>
+                            </div>
+                        </div>
+                        <div class="wave-foreground">
+                            <div class="wave-canvas -one"></div>
+                            <div class="wave-canvas -two"></div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
-        // 2. 이미지 클릭 시 통합 함수 실행
-        randomImage.addEventListener('click', () => {
-            // 원하는 팀 수를 설정 (예: 2팀)
-            const teamCount = 2; 
+        function processFishing() {
+            gameData.isFishing = true;
+            const idx = gameData.currentSwiper.activeIndex;
+            const activeSlide = gameData.currentSwiper.slides[idx];
+            const line = activeSlide.querySelector(`.fishing-line`);
+            const fish = activeSlide.querySelector(`.fish`);
+            const record = document.getElementById(`record-${idx}`);
 
-            // 함수들이 로드되었는지 최종 확인 후 실행
-            if (typeof executeSnakeDraft === 'function' && typeof randomArrangeAndShare === 'function') {
-                console.log("배정 및 공유 프로세스 시작...");
-                randomArrangeAndShare(teamCount);
-            } else {
-                console.error("함수를 찾을 수 없습니다. 파일 경로와 로드 순서를 확인하세요.");
-                alert("스크립트 파일이 올바르게 로드되지 않았습니다. 콘솔(F12)을 확인해주세요.");
+            line.style.height = "420px"; // 줄 내리기
+
+            setTimeout(() => {
+                fish.style.display = 'block';
+                line.style.height = "130px"; // 낚아채기
+
+                setTimeout(() => {
+                    const team = gameData.teams[idx];
+                    if (team.members.length > 0) {
+                        const member = team.members.shift();
+                        if (record.innerHTML === "대기 중...") record.innerHTML = "";
+                        const item = document.createElement('div');
+                        item.innerHTML = `&nbsp;🎣 <b>${member.name}</b> 성공!`;
+                        record.prepend(item);
+                        gameData.totalFished++;
+                    }
+
+                    setTimeout(() => {
+                        fish.style.display = 'none';
+                        line.style.height = "150px";
+                        gameData.isFishing = false;
+
+                        if (gameData.totalFished >= gameData.totalMembers) {
+                            document.getElementById('game-result-overlay').style.display = 'block';
+                        } else {
+                            gameData.currentSwiper.slideTo((idx + 1) % gameData.teams.length);
+                        }
+                    }, 800);
+                }, 700);
+            }, 800);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && gameData.currentSwiper && !gameData.isFishing) {
+                e.preventDefault();
+                processFishing();
             }
         });
+
+        function closeGame() {
+            document.getElementById('minigame-overlay').style.display = 'none';
+        }
     </script>
 </body>
+
 </html>

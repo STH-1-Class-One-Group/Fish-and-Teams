@@ -89,18 +89,17 @@ function mainFrm() {
     // [수정 2] 데이터를 넣을 타겟 요소 찾기 (.table-data)
     // 기존에는 #app을 통째로 갈아엎었지만, 이제는 리스트 영역만 갱신합니다.
     const tableDataContainer = document.querySelector(".table-data");
-    
+
     if (tableDataContainer) {
-        tableDataContainer.innerHTML = listItems;
+      tableDataContainer.innerHTML = listItems;
     } else {
-        console.error("HTML에서 .table-data 요소를 찾을 수 없습니다!");
+      console.error("HTML에서 .table-data 요소를 찾을 수 없습니다!");
     }
 
     // [수정 3] 이벤트 리스너 재연결 (컨트롤러 기능 활성화)
     // *주의: HTML 파일에 ID가 제대로 부여되어 있어야 작동합니다.
     bindDistributeEvents();
     clickRandomTeamBtn();
-
   } catch (error) {
     console.error("Error rendering main form:", error);
   }
@@ -209,60 +208,78 @@ function addMember() {
  * [함수: modifyMember]
  * 역할: 선택된 멤버의 기존 정보를 팝업창에 띄우고, 수정된 내용을 저장합니다.
  */
+/**
+ * [함수: modifyMember]
+ * 역할: 선택된 멤버의 기존 정보를 팝업창에 띄우고, 수정된 내용을 저장합니다.
+ */
 function modifyMember() {
-  // 1. 체크된 박스들만 가져오기
-  // 멤버들이 지정된 영역 중에 체크된 것들만
+  // 1. [수정] 정확히 'memberCheckbox' 이름을 가진 체크박스만 가져오기
+  // (밸런스 옵션 체크박스가 선택되는 문제 방지)
   const checkedBoxes = document.querySelectorAll(
-    'input[type="checkbox"][name="memberCheckbox"]:checked',
+    'input[name="memberCheckbox"]:checked',
   );
 
-  // 유효성 검사 통해서 수정에 방해되는 조건 막기
-  // 아무것도 선택 안 했거나
+  // 유효성 검사: 아무것도 선택 안 했을 때
   if (checkedBoxes.length === 0) {
-    alert("수정할 내용을 선택하십시오.");
+    alert("수정할 멤버를 선택해주세요.");
     return;
   }
-  // 2개 이상 선택했을 때
+  // 유효성 검사: 2명 이상 선택했을 때
   if (checkedBoxes.length > 1) {
-    alert("하나의 항목만 선택하여 주십시오.");
+    alert("수정은 한 번에 한 명만 가능합니다.");
     return;
   }
 
   // 2. 수정할 대상 데이터 찾기
-  // 체크박스에 심어둔 data-index 속성으로 몇 번째 멤버인지 확인
   const index = checkedBoxes[0].getAttribute("data-index");
-  // member들 명단은 localstorage에 지정되어 있는 teamMembers 키의 값에 의해 결정
-  //   팀이 없다면 빈 명단 지정
   let members = JSON.parse(localStorage.getItem("teamMembers")) || [];
-  //   전체 명단중에 수정하기로 한 명단 지정
-  const memberToModify = members[index];
 
-  //   유효성 검사
-  //   명단에 없다면 알람과 함께 아무것도 하지 않음
-  if (!memberToModify) {
+  // 데이터 유효성 검사
+  if (!members[index]) {
     alert("선택한 멤버 정보를 찾을 수 없습니다.");
     return;
   }
 
+  const memberToModify = members[index];
+
   // 3. 셀렉트 박스(별점) 옵션 미리 만들기
-  // 기존 값과 일치하는 옵션에 'selected' 속성을 추가함
   let options = "";
   for (let i = 0; i < 5; i++) {
     const stars = "⭐️".repeat(i + 1);
-    // 현재 멤버의 점수(value)와 i가 같으면 선택된 상태로 표시
     const selected = i == memberToModify.value ? "selected" : "";
     options += `<option value="${i}" ${selected}>${stars}</option>`;
   }
 
-  // 4. 수정 팝업창 열기
-  const modifyWindow = window.open("", "_blank", "width=400,height=400");
+  // 4. [수정] 팝업창 열기
+  const modifyWindow = window.open("", "_blank", "width=400,height=500");
+
+  // [중요] 팝업 차단 등으로 창이 안 열렸을 경우 방어 코드
+  if (!modifyWindow) {
+    alert("팝업 차단을 해제해주세요!");
+    return;
+  }
+
+  // 5. [중요] 'modifyWindow' 객체에 write를 해야 합니다.
+  // 그냥 document.write()를 쓰면 부모 창(현재 사이트)이 하얗게 날아갑니다.
   modifyWindow.document.write(`
         <html>
         <head>
             <title>멤버 수정</title>
+            <style>
+                body { font-family: sans-serif; padding: 20px; background-color: #f9f9f9; }
+                h2 { color: #333; border-bottom: 2px solid #50c878; padding-bottom: 10px; }
+                p { margin: 10px 0; }
+                label { display: inline-block; width: 60px; font-weight: bold; }
+                input[type="text"] { padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+                button { 
+                    background-color: #50c878; color: white; border: none; 
+                    padding: 10px 20px; border-radius: 4px; cursor: pointer; 
+                    font-weight: bold; margin-top: 20px; width: 100%;
+                }
+                button:hover { background-color: #3cb371; }
+            </style>
             <script>
                 function submitModify() {
-                    // (추가 함수와 로직 동일) 값 가져오기 및 유효성 검사
                     const name = document.getElementById('name').value;
                     const age = document.getElementById('age').value;
                     const sex = document.querySelector('input[name="sex"]:checked');
@@ -280,34 +297,40 @@ function modifyMember() {
                     // 수정된 객체 생성
                     const modifiedMember = { name, age, sex: sex.value, value };
 
-                    // 부모창 데이터 가져오기
+                    // 부모창 데이터 가져오기 (window.opener 사용)
                     let members = JSON.parse(window.opener.localStorage.getItem('teamMembers')) || [];
                     
-                    // ★ 핵심: push가 아니라 해당 인덱스(index)의 값을 덮어쓰기
-                    // 여기서 ${index}는 템플릿 리터럴을 통해 부모창에서 넘겨준 숫자값임
+                    // 해당 인덱스 덮어쓰기
+                    // ${index}는 템플릿 리터럴로 넘어온 고정된 숫자입니다.
                     members[${index}] = modifiedMember;
 
-                    // 저장 및 갱신
+                    // 저장 및 화면 갱신
                     window.opener.localStorage.setItem('teamMembers', JSON.stringify(members));
-                    window.opener.mainFrm();
-                    window.opener.close();
+                    window.opener.mainFrm(); // 부모창 리스트 새로고침
+                    
+                    // [UX 추가] 전체 선택 체크박스가 켜져있으면 꺼주기
+                    const masterCheckbox = window.opener.document.querySelector('input[onclick="sumCheckbox(this)"]');
+                    if(masterCheckbox) masterCheckbox.checked = false;
+
+                    window.close(); // 팝업 닫기
                 }
             <\/script>
         </head>
         <body>
-            <h2>멤버 수정</h2>
-            <p>이름: <input type="text" id="name" value="${memberToModify.name}"></p>
-            <p>나이: <input type="text" id="age" value="${memberToModify.age}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)"></p>
-            <p>성별: 
+            <h2>✏️ 멤버 수정</h2>
+            <p><label>이름:</label> <input type="text" id="name" value="${memberToModify.name}"></p>
+            <p><label>나이:</label> <input type="text" id="age" value="${memberToModify.age}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)"></p>
+            <p><label>성별:</label> 
                 <input type="radio" name="sex" value="남자" ${memberToModify.sex === "남자" ? "checked" : ""}> 남자
                 <input type="radio" name="sex" value="여자" ${memberToModify.sex === "여자" ? "checked" : ""}> 여자
             </p>
-            <p>능력: 
-                <select id="ability">
+            <p><label>능력:</label> 
+                <select id="ability" style="padding: 5px;">
                     <option value="" disabled>선택하십시오</option>
-                    ${options} </select>
+                    ${options} 
+                </select>
             </p>
-            <button onclick="submitModify()">수정</button>
+            <button onclick="submitModify()">수정 완료</button>
         </body>
         </html>
     `);
@@ -320,10 +343,14 @@ function modifyMember() {
  * [함수: delMember]
  * 역할: 체크된 멤버들을 배열에서 제거하고 저장합니다.
  */
+/**
+ * [함수: delMember]
+ * 역할: 체크된 멤버들을 배열에서 제거하고 저장합니다.
+ */
 function delMember() {
-  // 1. 체크된 박스 모두 가져오기
+  // [수정] 모든 체크박스가 아니라, 'memberCheckbox'라는 이름을 가진 체크박스만 선택!
   const checkedBoxes = document.querySelectorAll(
-    'input[type="checkbox"]:checked',
+    'input[name="memberCheckbox"]:checked',
   );
 
   if (checkedBoxes.length === 0) {
@@ -333,24 +360,34 @@ function delMember() {
 
   // 2. 삭제할 인덱스들 수집
   let members = JSON.parse(localStorage.getItem("teamMembers")) || [];
-  // map을 통해 체크박스 요소들을 숫자(인덱스) 배열로 변환
+
   const indicesToDelete = Array.from(checkedBoxes).map((cb) =>
     parseInt(cb.getAttribute("data-index"), 10),
   );
 
-  // 3. ★ 중요: 내림차순 정렬 (큰 숫자부터 삭제)
-  // 이유: 앞(0번)을 지우면 뒤(1번)가 0번으로 당겨짐.
-  // 인덱스가 꼬이는 것을 방지하기 위해 뒤에서부터 지워야 함.
-  indicesToDelete.sort((a, b) => b - a);
+  // [안전장치 추가] 혹시라도 NaN이 들어오면 걸러내기
+  const validIndices = indicesToDelete.filter((idx) => !isNaN(idx));
+
+  // 3. 내림차순 정렬 (큰 숫자부터 삭제해야 인덱스가 안 꼬임)
+  validIndices.sort((a, b) => b - a);
 
   // 4. 배열에서 삭제 (splice)
-  for (const index of indicesToDelete) {
-    members.splice(index, 1); // 해당 인덱스부터 1개 삭제
+  for (const index of validIndices) {
+    // 인덱스가 유효한 범위인지 한 번 더 확인하면 완벽합니다.
+    if (index >= 0 && index < members.length) {
+      members.splice(index, 1);
+    }
   }
 
   // 5. 저장 및 화면 갱신
   localStorage.setItem("teamMembers", JSON.stringify(members));
-  mainFrm(); // 여기서는 팝업이 아니므로 window.opener 없이 바로 호출
+  mainFrm();
+
+  // [추가] 전체 선택 체크박스가 켜져있을 수 있으니 꺼주기 (UI 센스)
+  const masterCheckbox = document.querySelector(
+    'input[onclick="sumCheckbox(this)"]',
+  );
+  if (masterCheckbox) masterCheckbox.checked = false;
 }
 
 // ===========================================================

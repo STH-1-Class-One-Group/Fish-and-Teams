@@ -52,94 +52,54 @@ function mainFrm() {
 
     const valueToStars = (value) => {
       const numValue = parseInt(value, 10);
-      if (isNaN(numValue) || numValue < 0 || numValue > 4) {
-        return "";
-      }
+      if (isNaN(numValue) || numValue < 0 || numValue > 4) return "";
       return "⭐️".repeat(numValue + 1);
     };
 
-    let tableRows = members
+    // [수정 1] 새로운 HTML 구조(li.table-data-list)에 맞춰서 리스트 아이템 생성
+    let listItems = members
       .map((member, index) => {
         return `
-                <tr style="border: 1px solid black;">
-                    <td style="border: 1px solid black; padding: 5px; text-align: center;">
-                        <input type="checkbox" name="memberCheckbox" data-index="${index}">
-                    </td>
-                    <td style="border: 1px solid black; padding: 5px;">${member.name}</td>
-                    <td style="border: 1px solid black; padding: 5px;">${member.age}</td>
-                    <td style="border: 1px solid black; padding: 5px;">${member.sex}</td>
-                    <td style="border: 1px solid black; padding: 5px;">${valueToStars(member.value)}</td>
-                </tr>
-            `;
+            <li class="table-data-list">
+                <ul class="table-row">
+                    <li class="table-cells tc-checkbox center">
+                        <input type="checkbox" name="memberCheckbox" data-index="${index}" />
+                    </li>
+                    <li class="table-cells tc-number">
+                        <p>${index + 1}</p>
+                    </li>
+                    <li class="table-cells tc-etc">
+                        <p>${member.name}</p>
+                    </li>
+                    <li class="table-cells tc-etc">
+                        <p>${member.age}</p>
+                    </li>
+                    <li class="table-cells tc-etc">
+                        <p>${member.sex}</p>
+                    </li>
+                    <li class="table-cells tc-etc">
+                        <p>${valueToStars(member.value)}</p>
+                    </li>
+                </ul>
+            </li>
+        `;
       })
       .join("");
 
-    const app = document.getElementById("app");
+    // [수정 2] 데이터를 넣을 타겟 요소 찾기 (.table-data)
+    // 기존에는 #app을 통째로 갈아엎었지만, 이제는 리스트 영역만 갱신합니다.
+    const tableDataContainer = document.querySelector(".table-data");
+    
+    if (tableDataContainer) {
+        tableDataContainer.innerHTML = listItems;
+    } else {
+        console.error("HTML에서 .table-data 요소를 찾을 수 없습니다!");
+    }
 
-    // [수정] 결과가 나올 영역(div id="team-result-area")을 추가했습니다!
-    app.innerHTML = `
-            <table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
-                <thead>
-                    <tr style="border: 2px solid black;">
-                        <th style="border: 1px solid black; padding: 5px; width: 50px;">
-                            <input type="checkbox" onclick="sumCheckbox(this)">
-                        </th>
-                        <th style="border: 1px solid black; padding: 5px;">이름</th>
-                        <th style="border: 1px solid black; padding: 5px;">나이</th>
-                        <th style="border: 1px solid black; padding: 5px;">성별</th>
-                        <th style="border: 1px solid black; padding: 5px;">능력</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tableRows}
-                </tbody>
-            </table>
-            <br>
-            
-            <div class="basic-controls" style="margin-bottom: 20px;">
-                <button onclick="addMember()">추가</button>
-                <button onclick="modifyMember()">수정</button>
-                <button onclick="delMember()">삭제</button>
-            </div>
-
-            <fieldset style="border: 2px solid #4a90e2; border-radius: 8px; padding: 15px; background-color: #f0f8ff;">
-                <legend style="font-weight: bold; color: #0044cc;">⚖️ 팀 배정 옵션</legend>
-                
-                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                    
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <label for="input-team-count"><strong>팀 개수:</strong></label>
-                        <input type="number" id="input-team-count" value="2" min="2" style="width: 50px; padding: 5px;">
-                    </div>
-
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <strong>밸런스 기준:</strong>
-                        <label><input type="checkbox" id="chk-ability" checked> 💪 능력</label>
-                        <label><input type="checkbox" id="chk-gender" checked> 🚻 성별</label>
-                        <label><input type="checkbox" id="chk-age"> 🎂 나이</label>
-                    </div>
-
-                    <div style="display:flex; gap: 10px;">
-                        <button id="btn-assign-teams" style="background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                            ⚖️ 조건부 배정
-                        </button>
-                        
-                        <button id="btn-random-teams" style="background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                            🎲 랜덤 배정
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-
-            <hr>
-            <div id="team-result-area" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;"></div>
-        `;
-
-    // [핵심 수정] 화면을 그린 직후에, 팀 배정 버튼에 이벤트를 다시 연결해줍니다.
-    // [이벤트 연결]
-    // 화면이 그려진 직후에 두 컨트롤러를 모두 실행해서 이벤트를 달아줍니다.
-    bindDistributeEvents(); // 기존 조건부 배정
-    clickRandomTeamBtn();   // [NEW] 랜덤 배정
+    // [수정 3] 이벤트 리스너 재연결 (컨트롤러 기능 활성화)
+    // *주의: HTML 파일에 ID가 제대로 부여되어 있어야 작동합니다.
+    bindDistributeEvents();
+    clickRandomTeamBtn();
 
   } catch (error) {
     console.error("Error rendering main form:", error);

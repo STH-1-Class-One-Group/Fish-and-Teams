@@ -122,7 +122,7 @@ main {
     justify-content: center; 
 }
 .container { width: 960px; padding: 60px 0; }
-.section { 
+section { 
     border: 1px solid #3372FF;
     border-radius: 12px;
     padding: 20px;

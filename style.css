@@ -35,11 +35,10 @@ body {
     gap: 10px;
 }
 
-/* [3] 미니게임 오버레이 (핵심 수정) */
+/* [3] 미니게임 오버레이 */
 #minigame-overlay {
     display: none;
     position: fixed !important;
-    /* 화면에 박제 */
     top: 0;
     left: 0;
     width: 100vw;
@@ -61,15 +60,14 @@ body {
     overflow: hidden;
 }
 
-
-/* [4] 물결 레이어 시스템 - 바다 위치 하향 조정 */
+/* [4] 물결 레이어 시스템 - 파도 폭을 완만하게 수정 */
 .wave-background,
 .wave-foreground {
     position: absolute;
-    top: 250%;
-    /* 이 수치가 커질수록 바다가 아래로 내려갑니다 */
+    top: 45%;
+    /* 배의 위치와 맞춤 */
     width: 100%;
-    height: 20%;
+    height: 100%;
 }
 
 .wave-background {
@@ -81,55 +79,90 @@ body {
     pointer-events: none;
 }
 
+/* [4] 물결 레이어 시스템 - 파도 폭 최소화 (잔물결) */
 .wave-canvas {
     position: absolute;
-    width: 400vw;
-    height: 400vw;
-    left: -150vw;
-    border-radius: 43%;
+    /* 폭을 줄이기 위해 크기 대폭 확대 (회전 반경을 넓게 해서 완만하게 만듦) */
+    width: 500vw;
+    height: 500vw;
+    left: -200vw;
+    /* 50%에 가까울수록 원형이 되어 파도가 거의 안 느껴지므로 48%로 설정 */
+    border-radius: 48%;
     transform-origin: 50% 50%;
-    animation: wave-rotate 20s infinite linear;
+    animation: wave-rotate 15s infinite linear;
 }
 
 .wave-canvas.-one {
     background: #4fc3f7;
-    opacity: 0.6;
-    top: 0px;
+    opacity: 0.5;
+    top: -10px;
 }
 
 .wave-canvas.-two {
     background: #0670d3;
-    opacity: 0.6;
-    top: 10px;
+    opacity: 0.5;
+    top: -5px;
     animation-direction: reverse;
+    animation-duration: 20s;
 }
 
 .wave-canvas.-three {
     background: #012d50;
-    opacity: 0.4;
-    top: 20px;
+    opacity: 0.3;
+    top: 0px;
 }
 
-/* [5] 배 위치 조정 - 바다 수평선에 맞춤 */
-.boat-container {
-    position: absolute;
-    top: 250%;
-    /* 위 wave의 top 수치와 반드시 일치시켜야 배가 물 위에 뜹니다 */
-    left: 50%;
-    transform: translate(-50%, -90%);
-    width: 480px;
-    height: 320px;
-    z-index: 150;
-}
-
+/* [5] 배 설정 - 확실한 둥실둥실 애니메이션 */
 .boat-container {
     position: absolute;
     top: 45%;
     left: 50%;
-    transform: translate(-50%, -90%);
+    /* 기본 정렬은 -50%만 유지하고, 상하 이동은 애니메이션에서 처리 */
+    transform: translateX(-50%);
     width: 480px;
     height: 320px;
     z-index: 150;
+    /* 2.5초 주기로 조금 더 빠르게 움직이도록 설정 */
+    animation: boat-bobbing 2.5s ease-in-out infinite;
+}
+
+/* [6] 애니메이션 정의 - 확실한 움직임 부여 */
+
+/* 파도 회전 (기존 유지) */
+@keyframes wave-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 배 둥실둥실 (위아래로 약 20px 이동 + 좌우 3도 회전) */
+@keyframes boat-bobbing {
+
+    0%,
+    100% {
+        /* 처음 위치: 살짝 아래, 정방향 */
+        transform: translate(-50%, -85%) rotate(0deg);
+    }
+
+    50% {
+        /* 중간 위치: 위로 훅 올라가며 살짝 기울어짐 */
+        transform: translate(-50%, -105%) rotate(3deg);
+    }
+}
+
+/* 물고기 퍼덕거림 (기존 유지) */
+@keyframes struggle {
+    0% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(10deg);
+    }
 }
 
 .fishing-line {
@@ -160,6 +193,7 @@ body {
     animation: struggle 0.2s infinite;
 }
 
+/* [6] 결과창 및 애니메이션 정의 */
 #game-result-overlay {
     display: none;
     position: absolute;
@@ -174,6 +208,7 @@ body {
     z-index: 10001;
 }
 
+/* 파도 회전 애니메이션 */
 @keyframes wave-rotate {
     from {
         transform: rotate(0deg);
@@ -184,6 +219,20 @@ body {
     }
 }
 
+/* 배 둥실둥실 애니메이션 (위아래 이동 + 미세한 회전) */
+@keyframes boat-bobbing {
+
+    0%,
+    100% {
+        transform: translate(-50%, -90%) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(-50%, -96%) rotate(1.5deg);
+    }
+}
+
+/* 물고기 퍼덕거림 */
 @keyframes struggle {
     0% {
         transform: rotate(-10deg);

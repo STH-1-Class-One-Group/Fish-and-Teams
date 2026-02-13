@@ -4,13 +4,16 @@ import renderTeamResults from "../view/renderTeamResult.js";
 const bindDistributeEvents = () => {
   const btn = document.getElementById("btn-assign-teams");
   
-  // 요소 가져오기 (여기서는 요소만 가져옵니다. 값은 아직 안 가져옴)
+  // 요소 가져오기
   const abillityCheck = document.getElementById("chk-ability");
   const genderCheck = document.getElementById("chk-gender");
   const ageCheck = document.getElementById("chk-age");
 
   if (btn) {
     btn.addEventListener("click", () => {
+      // [핵심 수정] 여기도 동일하게 포커스를 해제합니다.
+      btn.blur();
+
       // 1. 팀 개수 가져오기
       const inputCount = document.getElementById("input-team-count").value;
       const teamCount = parseInt(inputCount, 10);
@@ -20,19 +23,17 @@ const bindDistributeEvents = () => {
         return;
       }
 
-      // 2. [수정됨] ★ 버튼을 클릭하는 순간! 값을 읽어옵니다 ★
-      // 그래야 사용자가 방금 바꾼 체크 상태가 반영됩니다.
+      // 2. 버튼을 클릭하는 순간! 값을 읽어옵니다
       const options = {
         useAbility: abillityCheck.checked, // 능력 밸런스
         useGender: genderCheck.checked,    // 성별 밸런스
         useAge: ageCheck.checked,          // 나이 밸런스
       };
 
-      // 3. [수정됨] ★ 유효성 검사 추가 ★
-      // 셋 다 false라면 (하나도 체크 안 했다면)
+      // 3. 유효성 검사 추가
       if (!options.useAbility && !options.useGender && !options.useAge) {
         alert("최소 하나의 밸런스 조건은 선택해야 합니다! (능력, 성별, 나이 중 택1)");
-        return; // 함수 종료 (팀 배정 실행 안 함)
+        return; 
       }
 
       // 4. 데이터 가져오기
@@ -52,10 +53,6 @@ const bindDistributeEvents = () => {
       renderTeamResults(resultTeams);
     });
   }
-
-  // [참고] checkArr 부분은 사실 필요 없습니다!
-  // 버튼 누를 때 검사하면 되니까요. 
-  // 굳이 실시간으로 감시할 필요가 없습니다. 과감하게 지우셔도 됩니다.
 };
 
 export default bindDistributeEvents;

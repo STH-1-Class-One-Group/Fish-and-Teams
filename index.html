@@ -234,16 +234,25 @@
   <body class="ocean">
     <header>
       <h1 class="logo">
-        <a href="index.html"><img src="/img/Signature.svg" alt="오션모드 배경화면" /></a>
-        <!-- 라이트모드/다크모드/오션모드 선택 버튼 -->
+        <a href="index.html"><img src="/img/Signature.svg" alt="로고" /></a>
       </h1>
       <div class="header-btn-area">
         <div class="relative width100px height40px">
-          <button class="relative width100px height40px z-index-0 border-radius-10 text-bold transition-all-0-3">오션모드</button>
-          <select id="theme-select" name="theme-select" class="z-index-5 absolute left0 top0 width100px height40px opacity-0 cursor-pointer" onchange="">
-            <option value="dark text-bold">다크모드</option>
-            <option value="light text-bold">라이트 모드</option>
-            <option value="ocean text-bold" selected>오션모드</option>
+          <button
+            id="theme-display-btn"
+            class="relative width100px height40px z-index-0 border-radius-10 text-bold transition-all-0-3"
+          >
+            오션모드
+          </button>
+
+          <select
+            id="theme-select"
+            name="theme-select"
+            class="z-index-5 absolute left0 top0 width100px height40px opacity-0 cursor-pointer"
+          >
+            <option value="dark" class="text-bold">다크모드</option>
+            <option value="light" class="text-bold">라이트 모드</option>
+            <option value="ocean" class="text-bold" selected>오션모드</option>
           </select>
         </div>
       </div>
@@ -306,7 +315,7 @@
             <div class="flex align-center">
               <p class="text-bold">팀 수</p>
               <input
-                class="margin-left-10"
+                class="margin-left-10 dark-text"
                 type="number"
                 id="input-team-count"
                 value="2"
@@ -395,6 +404,7 @@
             cursor: pointer;
             font-weight: bold;
           "
+          class="dark-text"
         >
           결과 확인하기
         </button>
@@ -501,7 +511,7 @@
                     <div class="game-screen">
                         <div class="team-info">
                             <h2>${team.teamName}</h2>
-                            <div class="record-box" id="record-${idx}">대기 중...</div>
+                            <div class="record-box dark-text" id="record-${idx}">대기 중...</div>
                         </div>
                         <div class="wave-background"><div class="wave-canvas -three"></div></div>
                         <div class="boat-container">
@@ -558,7 +568,7 @@
               const member = team.members.shift();
               if (record.innerHTML === "대기 중...") record.innerHTML = "";
               const item = document.createElement("div");
-              item.innerHTML = `&nbsp;🎣 <b>${member.name}</b> 성공!`;
+              item.innerHTML = `&nbsp;🎣 <b class="dark-text">${member.name}</b> 성공!`;
               record.prepend(item);
               gameData.totalFished++;
             } else {

@@ -235,7 +235,18 @@
     <header>
       <h1 class="logo">
         <a href="index.html"><img src="/img/Signature.svg" alt="" /></a>
+        <!-- 라이트모드/다크모드/오션모드 선택 버튼 -->
       </h1>
+      <div class="header-btn-area">
+        <div class="relative">
+          <button class="relative width100px height40px z-index-5">오션모드</button>
+          <select id="theme-select" name="theme-select" class="z-index-0 absolute left0 top0 width100px height40px" onchange="">
+            <option value="dark">다크모드</option>
+            <option value="light">라이트 모드</option>
+            <option value="ocean" selected>오션모드</option>
+          </select>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -346,7 +357,17 @@
         <div class="swiper-wrapper" id="game-screens-wrapper"></div>
       </div>
       <div id="game-result-overlay">
-        <h3 style="font-size: 24px; position: absolute; top: 30px; left: 50%; transform: translateX(-50%);">🎣 배정 완료!</h3>
+        <h3
+          style="
+            font-size: 24px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+          "
+        >
+          🎣 배정 완료!
+        </h3>
         <p
           style="
             position: absolute;

@@ -1,5 +1,3 @@
-import popupFish from "./popupFish.js"; // 사이드 이펙트용 import
-
 /**
  * [함수: renderTeamResults]
  * 역할: 결과를 HTML에 그리고, 낚시 게임을 트리거합니다.

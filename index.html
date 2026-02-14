@@ -234,16 +234,16 @@
   <body class="ocean">
     <header>
       <h1 class="logo">
-        <a href="index.html"><img src="/img/Signature.svg" alt="" /></a>
+        <a href="index.html"><img src="/img/Signature.svg" alt="오션모드 배경화면" /></a>
         <!-- 라이트모드/다크모드/오션모드 선택 버튼 -->
       </h1>
       <div class="header-btn-area">
-        <div class="relative">
-          <button class="relative width100px height40px z-index-5">오션모드</button>
-          <select id="theme-select" name="theme-select" class="z-index-0 absolute left0 top0 width100px height40px" onchange="">
-            <option value="dark">다크모드</option>
-            <option value="light">라이트 모드</option>
-            <option value="ocean" selected>오션모드</option>
+        <div class="relative width100px height40px">
+          <button class="relative width100px height40px z-index-0 border-radius-10 text-bold transition-all-0-3">오션모드</button>
+          <select id="theme-select" name="theme-select" class="z-index-5 absolute left0 top0 width100px height40px opacity-0 cursor-pointer" onchange="">
+            <option value="dark text-bold">다크모드</option>
+            <option value="light text-bold">라이트 모드</option>
+            <option value="ocean text-bold" selected>오션모드</option>
           </select>
         </div>
       </div>

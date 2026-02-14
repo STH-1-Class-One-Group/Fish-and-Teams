@@ -7,8 +7,7 @@ import pressSpaceBar from "../controller/pressSpaceBar.js";
 // clickThemeButton 가져오기
 import hoverThemeButton from "../controller/hoverThemeButton.js";
 // themeController 가져오기
-import themeController from "../controller/themeController.js"; 
-
+import themeController from "../controller/themeController.js";
 
 // 가져온 것 테스트
 
@@ -142,6 +141,19 @@ function addMember() {
   addWindow.document.write(`
         <html>
         <head>
+            <style>
+                body { font-family: sans-serif; padding: 20px; background-color: #f9f9f9; }
+                h2 { color: #333; border-bottom: 2px solid #50c878; padding-bottom: 10px; }
+                p { margin: 10px 0; }
+                label { display: inline-block; width: 60px; font-weight: bold; }
+                input[type="text"] { padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
+                button { 
+                    background-color: #50c878; color: white; border: none; 
+                    padding: 10px 20px; border-radius: 4px; cursor: pointer; 
+                    font-weight: bold; margin-top: 20px; width: 100%;
+                }
+                button:hover { background-color: #3cb371; }
+            </style>
             <title>멤버 추가</title>
             <script>
                 // [내부 함수] 팝업창에서 '추가' 버튼 누르면 실행됨
@@ -185,7 +197,7 @@ function addMember() {
             </script>
         </head>
         <body>
-            <h2>멤버 추가</h2>
+            <h2>✏️ 멤버 추가</h2>
             <p>이름: <input type="text" id="name"></p>
             <p>나이: <input type="text" id="age" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)"></p>
             <p>성별: 
@@ -423,7 +435,7 @@ pressSpaceBar();
 hoverThemeButton();
 
 // themeController 적용
-themeController();  
+themeController();
 
 // [중요] 모듈 스코프 해결을 위한 전역 객체 할당
 // ===========================================================

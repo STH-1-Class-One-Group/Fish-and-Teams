@@ -1,7 +1,12 @@
 //  bindDistributeEvents 가져오기
 import bindDistributeEvents from "../controller/bindDistributeEvents.js";
+// clickRandomTeamBtn 가져오기
 import clickRandomTeamBtn from "../controller/clickRandomTeamBtn.js";
+// renderTeamResults 가져오기
 import pressSpaceBar from "../controller/pressSpaceBar.js";
+// clickThemeButton 가져오기
+import hoverThemeButton from "../controller/hoverThemeButton.js";
+
 
 // 가져온 것 테스트
 
@@ -411,6 +416,9 @@ startcurd();
 
 // pressSpaceBar 적용
 pressSpaceBar();
+
+// hoverThemeButton 적용
+hoverThemeButton();
 
 // [중요] 모듈 스코프 해결을 위한 전역 객체 할당
 // ===========================================================

@@ -415,7 +415,9 @@
 
     <div id="final-result-modal">
       <div class="modal-content">
-        <button class="close-modal-btn dark-text" onclick="closeResultModal()">✕</button>
+        <button class="close-modal-btn dark-text" onclick="closeResultModal()">
+          ✕
+        </button>
         <h2
           style="
             text-align: center;
@@ -444,20 +446,20 @@
     <script type="module" src="src/view/crud.js"></script>
 
     <script>
-      // [Lock Status] 스페이스바 연타 방지를 위한 핵심 변수
       let gameData = {
         teams: [],
         currentSwiper: null,
-        // isFishing(낚시 애니메이션 중) + isTransitioning(슬라이드 이동 중)
-        // 둘 중 하나라도 true면 입력 잠금
         isFishing: false,
         isTransitioning: false,
         totalFished: 0,
         totalMembers: 0,
       };
-      let fishInterval = null;
 
-      // [게임 시작]
+      // [수정] 자동 팝업 루프(startFishLoop) 관련 코드는 삭제하거나 주석 처리했습니다.
+      // 이유: 이제 스페이스바 누를 때만 뜨는 게 더 자연스럽기 때문입니다.
+      // 배경에서 심심하면 뜨게 하고 싶으면 다시 살려도 되지만,
+      // 지금 요청하신 "낚시 성공 시 이름 뜨는 기능"과는 충돌(이름이 없으니까)할 수 있습니다.
+
       window.startFishingGame = function (calculatedTeams) {
         gameData.teams = calculatedTeams.map((members, idx) => ({
           teamName: `Team ${idx + 1}`,
@@ -466,8 +468,6 @@
 
         gameData.totalMembers = calculatedTeams.flat().length;
         gameData.totalFished = 0;
-
-        // 초기화 시점에는 모든 잠금 해제
         gameData.isFishing = false;
         gameData.isTransitioning = false;
 
@@ -480,34 +480,16 @@
         gameData.currentSwiper = new Swiper(".mySwiper", {
           allowTouchMove: false,
           loop: true,
-          speed: 600, // 슬라이드 이동 속도 0.6초
+          speed: 600,
           observer: true,
           observeParents: true,
         });
-
-        startFishLoop();
       };
-
-      function startFishLoop() {
-        if (fishInterval) clearInterval(fishInterval);
-        if (window.popupFish) window.popupFish();
-        fishInterval = setInterval(() => {
-          if (window.popupFish) window.popupFish();
-        }, 2000);
-      }
-
-      function stopFishLoop() {
-        if (fishInterval) {
-          clearInterval(fishInterval);
-          fishInterval = null;
-        }
-      }
 
       function renderGameScreens() {
         const wrapper = document.getElementById("game-screens-wrapper");
         wrapper.innerHTML = gameData.teams
           .map((team, idx) => {
-            // [수정] 짝수는 fishing_1.svg, 홀수는 fishing_2.svg
             const fishermanImg = idx % 2 === 0 ? "1" : "2";
             return `
                 <div class="swiper-slide">
@@ -535,20 +517,15 @@
       }
 
       function processFishing() {
-        // [★중요★] 2중 잠금 장치: 낚시 중이거나 슬라이드 이동 중이면 무조건 리턴
         if (gameData.isFishing || gameData.isTransitioning) return;
-
-        // 이미 다 낚았으면 리턴
         if (gameData.totalFished >= gameData.totalMembers) return;
 
-        // 1. 낚시 시작 (잠금 ON)
         gameData.isFishing = true;
 
         const idx = gameData.currentSwiper.realIndex;
         const activeSlide =
           gameData.currentSwiper.slides[gameData.currentSwiper.activeIndex];
 
-        // 슬라이드가 로딩 안된 경우 방어
         if (!activeSlide) {
           gameData.isFishing = false;
           return;
@@ -558,25 +535,32 @@
         const fish = activeSlide.querySelector(`.fish`);
         const record = document.getElementById(`record-${idx}`);
 
-        // 낚싯줄 내리기
+        // 1. 낚싯줄 내리기
         line.style.height = "420px";
 
         setTimeout(() => {
+          // 2. 물고기 물기
           fish.style.display = "block";
           line.style.height = "130px"; // 낚아올리기
 
           setTimeout(() => {
+            // 3. 데이터 처리 및 팝업 표시
             const team = gameData.teams[idx];
             if (team.members.length > 0) {
-              const member = team.members.shift();
+              const member = team.members.shift(); // 멤버 꺼내기
+
               if (record.innerHTML === "대기 중...") record.innerHTML = "";
               const item = document.createElement("div");
               item.innerHTML = `&nbsp;🎣 <b class="dark-text">${member.name}</b> 성공!`;
               record.prepend(item);
               gameData.totalFished++;
+
+              // [★핵심★] 낚시 성공 시 팝업 호출 (이름 전달)
+              if (window.popupFish) {
+                window.popupFish(member.name);
+              }
             } else {
               alert("이 팀은 이미 만선입니다!");
-              // 예외 상황: 만선이면 잠금 해제해주어야 함
               gameData.isFishing = false;
               return;
             }
@@ -585,19 +569,14 @@
               fish.style.display = "none";
               line.style.height = "150px";
 
-              // [결정의 순간]
               if (gameData.totalFished >= gameData.totalMembers) {
-                // 게임 종료 시
-                stopFishLoop();
                 document.getElementById("game-result-overlay").style.display =
                   "block";
-                gameData.isFishing = false; // 게임 끝났으니 잠금 해제
+                gameData.isFishing = false;
               } else {
-                // 다음 사람 낚으러 이동 (잠금 유지 상태에서 슬라이드 이동 시작)
-                gameData.isTransitioning = true; // 이동 잠금 추가 ON
+                gameData.isTransitioning = true;
                 gameData.currentSwiper.slideNext();
 
-                // [★핵심★] 슬라이드 이동 시간(600ms) + 여유시간(100ms)이 지나야 잠금 해제
                 setTimeout(() => {
                   gameData.isFishing = false;
                   gameData.isTransitioning = false;
@@ -608,12 +587,11 @@
         }, 800);
       }
 
-      // 스페이스바 이벤트 리스너
       window.addEventListener("keydown", (e) => {
+        e.preventDefault();
         const overlay = document.getElementById("minigame-overlay");
         const resultOverlay = document.getElementById("game-result-overlay");
 
-        // 조건: 게임 화면이 켜져있고 + 결과창이 안 떴고 + (★잠금 상태가 아닐 때★)
         if (
           e.code === "Space" &&
           overlay.style.display === "block" &&
@@ -621,13 +599,11 @@
           !gameData.isFishing &&
           !gameData.isTransitioning
         ) {
-          e.preventDefault();
           processFishing();
         }
       });
 
       window.closeGameAndShowResult = function () {
-        stopFishLoop();
         document.getElementById("minigame-overlay").style.display = "none";
         document.getElementById("final-result-modal").style.display = "flex";
       };

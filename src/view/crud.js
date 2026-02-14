@@ -6,6 +6,8 @@ import clickRandomTeamBtn from "../controller/clickRandomTeamBtn.js";
 import pressSpaceBar from "../controller/pressSpaceBar.js";
 // clickThemeButton 가져오기
 import hoverThemeButton from "../controller/hoverThemeButton.js";
+// themeController 가져오기
+import themeController from "../controller/themeController.js"; 
 
 
 // 가져온 것 테스트
@@ -419,6 +421,9 @@ pressSpaceBar();
 
 // hoverThemeButton 적용
 hoverThemeButton();
+
+// themeController 적용
+themeController();  
 
 // [중요] 모듈 스코프 해결을 위한 전역 객체 할당
 // ===========================================================

@@ -422,3 +422,70 @@ footer .copyright {
     z-index: 5;
 }
 
+
+
+
+
+/* opacity */
+
+.opacity-100 {
+    opacity: 100%;
+}
+
+.opacity-0 {
+    opacity: 0%;
+}
+
+
+
+
+/* cursor */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+
+/* 둥글기 */
+
+.border-radius-10 {
+    border-radius: 10px;
+}
+
+.border-radius-100per {
+    border-radius: 100%;
+}
+
+
+/* transition */
+
+
+.transition-all-0-3{
+
+    transition: all 0.3s;
+
+}
+
+
+
+
+/* 배경색 */
+
+
+
+/* 글자색 */
+
+.text-color-fff{
+
+    color: #fff;
+
+}
+
+
+
+/* transform */
+
+.scale-up-1-05{
+
+    transform: scale(1.05)
+
+}

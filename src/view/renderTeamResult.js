@@ -28,7 +28,7 @@ function renderTeamResults(teams) {
 
         let memberListHTML = team.map(m => `
             <li style="margin: 5px 0;">
-                <strong>${m.name}</strong> 
+                <strong class="dark-text">${m.name}</strong> 
                 <span style="color:#666; font-size:0.9em;">
                     (${m.age}세, ${m.sex}, ⭐${parseInt(m.value)+1})
                 </span>
@@ -36,8 +36,8 @@ function renderTeamResults(teams) {
         `).join('');
 
         teamCard.innerHTML = `
-            <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:0;">Team ${index + 1}</h3>
-            <div style="color:blue; margin:10px 0px; font-weight:bold;">
+            <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px; margin-top:0;" class="dark-text">Team ${index + 1}</h3>
+            <div style="color:blue; margin:10px 0px; font-weight:bold;" class="dark-text">
                 👥 ${team.length}명 | 💪 평균: ${avgAbility}
             </div>
             <ul style="list-style:none; padding:0;">${memberListHTML}</ul>

@@ -1,9 +1,18 @@
+/* ===== Transition (부드러운 전환 효과 추가 추천) ===== */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* ===== Light ===== */
 .light {
     background-color: #FFFFFF;
 }
 .light * {
     color: #333333; 
+}
+.light .header-btn-area button {
+    background-color: #333;
+    color: #f0f0f0;
 }
 
 
@@ -14,13 +23,39 @@
 .dark * { 
     color: #FFFFFF; 
 }
+.dark .header-btn-area button {
+    background-color: #f0f0f0;
+    color: #333333;
+}
+
+/* 옵션도 다크모드 지정 */
+.dark select option {
+
+    background-color: #333;
+    color: #FFFFFF;
+
+}
+
+/* 일부 글자들은 다크모드에도 글자 검은색 */
+
+.dark .dark-text {
+
+    color: #333;
+
+}
+
+
+
+
 
 /* ===== Ocean ===== */
 .ocean {
-    background-image: url("/img/ocean_bg01.jpg");
+    /* 경로가 맞는지 꼭 확인하세요! */
+    background-image: url("/img/ocean_bg01.jpg"); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    min-height: 100vh; /* 배경 꽉 차게 */
 }
 .ocean * {
     color: #0E1B33;

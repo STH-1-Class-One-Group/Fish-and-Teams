@@ -228,55 +228,6 @@ h2 {
 }
 
 
-/* display flex */
-
-.flex {
-
-    display: flex;
-
-}
-
-
-/* 중앙 정렬 */
-
-.align-center {
-
-    align-items: center;
-
-}
-
-/* gap 5px */
-.flex-gap-5 {
-    gap: 5px;
-}
-
-/* gap 10px */
-.flex-gap-10 {
-    gap: 10px;
-}
-
-/* gap 20px */
-.flex-gap-20 {
-    gap: 20px;
-}
-
-/* text bold */
-.text-bold {
-    font-weight: bold;
-}
-
-/* 왼쪽 margin */
-.margin-left-10 {
-
-    margin-left: 10px;
-
-}
-
-.margin-left-5 {
-
-    margin-left: 5px;
-
-}
 
 /* section의 h2 더 크게 */
 
@@ -326,3 +277,148 @@ footer * {
 footer .copyright {
     margin-top: 20px;
 }
+
+
+
+/* 유틸리티 클래스==================================================== */
+
+
+
+
+
+/* display 관련*/
+
+
+
+
+/* display flex */
+
+.flex {
+
+    display: flex;
+
+}
+
+
+/* 중앙 정렬 */
+
+.align-center {
+
+    align-items: center;
+
+}
+
+/* gap 5px */
+.flex-gap-5 {
+    gap: 5px;
+}
+
+/* gap 10px */
+.flex-gap-10 {
+    gap: 10px;
+}
+
+/* gap 20px */
+.flex-gap-20 {
+    gap: 20px;
+}
+
+/* text bold */
+.text-bold {
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* margin */
+
+
+
+/* 왼쪽 margin */
+.margin-left-10 {
+
+    margin-left: 10px;
+
+}
+
+.margin-left-5 {
+
+    margin-left: 5px;
+
+}
+
+
+
+
+
+/* position */
+
+
+.relative {
+    position: relative;
+}
+.absolute {
+    position: absolute;
+}
+
+
+
+/* position left */
+.left0 {
+    left: 0;
+}
+
+/* potision right */
+.right30{
+    right:30px;
+}
+
+
+/* position top */
+.top0 {
+    top: 0;
+}
+
+
+
+
+
+/* 가로(width) */
+
+.width100px{
+
+    width:100px;
+
+}
+
+/* 세로(height) */
+
+.height40px{
+
+    height:40px;
+
+}
+
+
+
+
+/* z-index */
+
+.z-index-0 {
+    z-index: 0;
+}
+
+
+.z-index-5 {
+    z-index: 5;
+}
+

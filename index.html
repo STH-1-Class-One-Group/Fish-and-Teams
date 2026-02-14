@@ -362,6 +362,7 @@
     </main>
 
     <div id="minigame-overlay">
+      <button id="skip-btn" onclick="skipGame()">SKIP ≫</button>
       <div class="swiper mySwiper">
         <div class="swiper-wrapper" id="game-screens-wrapper"></div>
       </div>
@@ -610,6 +611,24 @@
 
       window.closeResultModal = function () {
         document.getElementById("final-result-modal").style.display = "none";
+      };
+
+      // [NEW] 스킵 버튼 클릭 시 실행될 함수
+      window.skipGame = function () {
+        // 1. 혹시 돌아가고 있을 낚시 루프/팝업 등을 정지
+        if (typeof stopFishLoop === "function") stopFishLoop();
+
+        // 2. 강제로 낚시 종료 상태로 변경 (백그라운드 로직 방지)
+        gameData.isFishing = false;
+        gameData.isTransitioning = false;
+
+        // 3. 게임 화면(오버레이) 숨기기
+        document.getElementById("minigame-overlay").style.display = "none";
+        document.getElementById("game-result-overlay").style.display = "none";
+
+        // 4. 미리 만들어진 결과 팝업 보여주기
+        // (renderTeamResult.js가 이미 #team-result-content에 내용을 채워둔 상태임)
+        document.getElementById("final-result-modal").style.display = "flex";
       };
     </script>
   </body>

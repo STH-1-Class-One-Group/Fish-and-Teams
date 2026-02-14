@@ -18,6 +18,9 @@ const popupFish = () => {
   popupFishElement.style.justifyContent = "center";
   popupFishElement.style.alignItems = "center";
   popupFishElement.style.position = "fixed";
+  popupFishElement.style.background = "#fff"
+  popupFishElement.style.border = "3px solid #333";
+  popupFishElement.style.borderRadius = "15px";
   popupFishElement.style.left = HALF;
   popupFishElement.style.top = HALF;
   popupFishElement.style.transform = `translate(-${HALF},-30%)`;

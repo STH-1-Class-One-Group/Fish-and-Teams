@@ -258,6 +258,28 @@ input[type="checkbox"] {
     height: 18px;
 }
 
+/* 스킵 버튼 스타일 */
+#skip-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10005; /* 게임 화면보다 위에 떠야 함 */
+    padding: 10px 25px;
+    background: rgba(0, 0, 0, 0.6); /* 반투명 검정 */
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+#skip-btn:hover {
+    background: white;
+    color: #333;
+    border-color: white;
+}
 
 /* ==== Footer ===== */
 footer {

@@ -8,6 +8,8 @@ import pressSpaceBar from "../controller/pressSpaceBar.js";
 import hoverThemeButton from "../controller/hoverThemeButton.js";
 // themeController 가져오기
 import themeController from "../controller/themeController.js";
+import setupGlobalFunctions from "../model/setupGlobalFunctions.js";
+import setupEventListeners from "../controller/setupEventListener.js";
 
 // 가져온 것 테스트
 
@@ -436,6 +438,11 @@ hoverThemeButton();
 
 // themeController 적용
 themeController();
+
+// [NEW] 낚시 게임 초기화 (전역 함수 등록 및 이벤트 연결)
+setupGlobalFunctions();
+setupEventListeners();
+
 
 // [중요] 모듈 스코프 해결을 위한 전역 객체 할당
 // ===========================================================

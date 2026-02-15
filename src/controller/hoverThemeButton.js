@@ -11,16 +11,11 @@ const hoverThemeButton = () => {
   // themeList에 호버 이벤트 추가
   themeList.addEventListener("mouseover", function () {
     themeButton.classList.add("scale-up-1-05");
-    themeButton.classList.add("text-color-fff")
   });
-    // themeList에서 마우스가 떠날 때 이벤트 추가
+  // themeList에서 마우스가 떠날 때 이벤트 추가
   themeList.addEventListener("mouseout", function () {
     themeButton.classList.remove("scale-up-1-05");
-    themeButton.classList.remove("text-color-fff")
-
   });
-
-
 };
 // export 하기
 export default hoverThemeButton;

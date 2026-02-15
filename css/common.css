@@ -41,10 +41,12 @@ button:hover {
 
 /* ===== Body ===== */
 body {
-  overflow: hidden;
-  width: calc(100vw - (100vw - 100%));
+  /* [수정] 스크롤 문제 해결 */
+  /* overflow: hidden; -> 삭제: 콘텐츠가 넘치면 스크롤이 생겨야 함 */
+  width: 100%; /* 100vw 대신 100% 사용 (스크롤바 너비 제외) */
   font-family: "Pretendard Variable";
   font-size: 14px;
+  overflow-y: hidden;
 }
 
 /* ===== Header ===== */
@@ -283,7 +285,7 @@ footer {
 }
 
 footer * {
-  color: #8895a0 !important;
+  color: #8895a0;
 }
 
 footer .copyright {

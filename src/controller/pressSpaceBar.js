@@ -1,23 +1,15 @@
-// popupFish.js 가져옴
-import popupFish from "../view/popupFish.js";
-
-
-// 스페이스 바 클릭시 이벤트 동작
 const pressSpaceBar = () => {
-
-    // 키 입력 이벤트
-    document.addEventListener("keypress",(e)=>{
-
-        // 만약에 누른 키가 스페이스 바일때
-        if(e.code === "Space"){
-
-            popupFish()
-
-        }
-
-    })
-
-}
+  // 키 입력 이벤트
+  document.addEventListener("keydown", (e) => {
+    // 미니게임 화면이 열려있을 때 스페이스바 기본 동작(스크롤) 차단
+    if (e.code === "Space") {
+      const overlay = document.getElementById("minigame-overlay");
+      if (overlay && overlay.style.display === "block") {
+        e.preventDefault();
+      }
+    }
+  });
+};
 
 // 출력
-export default pressSpaceBar
+export default pressSpaceBar;

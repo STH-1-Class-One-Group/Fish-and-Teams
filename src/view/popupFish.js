@@ -83,3 +83,15 @@ const popupFish = (memberName) => {
 window.popupFish = popupFish;
 
 export default popupFish;
+/**
+ * [파일 역할]
+ * - 낚시 성공 시 "누가 잡혔는지"를 물고기 이미지와 함께 잠시 보여주는 연출 팝업 View.
+ *
+ * [왜 필요한가]
+ * - 단순 텍스트 갱신만으로는 피드백이 약하므로, 시각적 보상(애니메이션 팝업)으로 게임감을 강화한다.
+ *
+ * [핵심 기능]
+ * - 랜덤 물고기 이미지 선택
+ * - 멤버 이름 포함 문구 렌더
+ * - requestAnimationFrame 기반 등장/퇴장 애니메이션 후 자동 제거
+ */

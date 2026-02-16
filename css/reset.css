@@ -1,3 +1,17 @@
+/*
+  [파일 역할]
+  - 브라우저 기본 스타일 차이를 초기화(Reset)해, 모든 페이지 요소가 일관된 기준에서 시작되도록 만드는 파일.
+
+  [왜 필요한가]
+  - 같은 HTML이라도 브라우저마다 기본 margin/padding/line-height가 달라 레이아웃이 깨질 수 있다.
+  - 초기값을 통일해 이후 common/theme/responsive 스타일이 예측 가능하게 적용되도록 한다.
+
+  [핵심 기능]
+  - 기본 태그의 margin/padding/border 초기화
+  - HTML5 시맨틱 태그 display 보정
+  - 리스트/인용/테이블 기본 스타일 제거
+  - 전역 box-sizing: border-box 적용
+*/
 /* http://meyerweb.com/eric/tools/css/reset/ 
     v2.0 | 20110126
     License: none (public domain)

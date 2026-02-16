@@ -46,3 +46,17 @@ window.sumCheckbox = memberController.sumCheckbox;
 window.addMember = memberController.addMember;
 window.modifyMember = memberController.modifyMember;
 window.delMember = memberController.delMember;
+/**
+ * [파일 역할]
+ * - 애플리케이션 초기 진입 파일. 각 컨트롤러/모델 초기화와 전역 함수 바인딩을 수행한다.
+ *
+ * [왜 필요한가]
+ * - 멤버 화면 초기 렌더, 테마/키보드 이벤트, 미니게임 전역 함수 등록은 시작 순서가 중요하다.
+ * - 한 파일에서 부트스트랩을 통합해 실행 순서를 명확히 관리한다.
+ *
+ * [핵심 기능]
+ * - window.onload에서 저장소 초기화 + 멤버 테이블 렌더
+ * - 스페이스바/테마 hover/테마 변경 이벤트 활성화
+ * - 미니게임 전역 함수 및 이벤트 리스너 등록
+ * - HTML onclick과 연결할 CRUD 함수(window.*) 노출
+ */

@@ -135,3 +135,16 @@
 .scale-up-1-05 {
   transform: scale(1.05);
 }
+/*
+  [파일 역할]
+  - 자주 쓰는 단일 목적 유틸리티 클래스(flex, gap, position, z-index 등)를 모아둔 파일.
+
+  [왜 필요한가]
+  - 중복 CSS 작성을 줄이고, HTML에서 클래스 조합만으로 빠르게 레이아웃을 구성할 수 있다.
+
+  [핵심 기능]
+  - 레이아웃: .flex, .align-center, .flex-gap-*
+  - 간격/크기: .margin-left-*, .width100px, .height40px
+  - 위치/레이어: .relative, .absolute, .left0, .top0, .z-index-*
+  - 인터랙션/표현: .cursor-pointer, .transition-all-0-3, .scale-up-1-05
+*/

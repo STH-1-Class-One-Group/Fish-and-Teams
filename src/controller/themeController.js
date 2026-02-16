@@ -1,3 +1,14 @@
+/**
+ * [파일 역할]
+ * - 테마 초기 적용과 사용자 변경 이벤트를 연결하는 컨트롤러.
+ *
+ * [왜 필요한가]
+ * - 페이지 시작 시 저장된 테마를 즉시 복원하고, 변경 시 model 저장 + view 반영을 동시에 처리해야
+ *   테마 상태가 일관되게 유지된다.
+ *
+ * [핵심 이벤트]
+ * - change(theme-select): 선택된 테마를 저장하고 화면 클래스/버튼 텍스트를 갱신
+ */
 import themeModel from "../model/themeModel.js";
 import themeView from "../view/themeView.js";
 

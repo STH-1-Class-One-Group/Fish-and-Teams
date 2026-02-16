@@ -72,3 +72,14 @@ const randomArrange = (members, teamCount) => {
 };
 
 export default randomArrange;
+/**
+ * [파일 역할]
+ * - 멤버를 무작위로 섞은 뒤 팀 수에 맞게 순환 배분하는 랜덤 팀 배정 모델.
+ *
+ * [왜 필요한가]
+ * - 조건 기반 배정이 아닌 "완전 랜덤 배정" 버튼 기능을 분리해 제공하기 위해 필요하다.
+ *
+ * [핵심 기능]
+ * - Fisher-Yates 셔플로 멤버 순서를 공정하게 랜덤화
+ * - index % teamCount 방식으로 팀별 인원수를 최대한 균등 분배
+ */

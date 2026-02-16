@@ -1,3 +1,15 @@
+/**
+ * [파일 역할]
+ * - 멤버 목록 테이블 렌더링과 추가/수정 팝업 UI를 담당하는 View 모듈.
+ *
+ * [왜 필요한가]
+ * - 입력 폼/목록 출력 같은 화면 책임을 분리하면, 컨트롤러는 흐름 제어와 검증에 집중할 수 있다.
+ *
+ * [핵심 기능]
+ * - renderMembers: 멤버 리스트를 테이블 형태로 DOM 출력
+ * - updateMasterCheckbox: 헤더 체크박스 상태 동기화
+ * - openAddPopup/openModifyPopup: 팝업 폼 생성, 입력 검증, 저장 후 부모 창 갱신
+ */
 import memberModel from "../model/memberModel.js";
 import bindDistributeEvents from "../controller/bindDistributeEvents.js";
 import clickRandomTeamBtn from "../controller/clickRandomTeamBtn.js";

@@ -1,3 +1,18 @@
+<!--
+  [파일 역할]
+  - Fish and Teams의 전체 화면 구조(레이아웃)와 주요 진입점을 정의하는 메인 HTML 파일.
+
+  [왜 필요한가]
+  - 사용자에게 멤버 관리, 팀 배정, 낚시 미니게임, 최종 결과 모달을 한 페이지에서 제공하기 위해 필요.
+  - JS 모듈들이 동작할 기준 DOM(id/class)을 제공하므로, 화면과 로직을 연결하는 핵심 앵커 파일이다.
+
+  [핵심 기능]
+  - 헤더: 테마 선택 UI(theme-select, theme-display-btn)
+  - 본문: 멤버 CRUD 테이블 + 팀 배정 옵션/버튼
+  - 오버레이: 미니게임 화면(minigame-overlay), 결과 오버레이(game-result-overlay)
+  - 모달: 최종 팀 결과(final-result-modal)
+  - 진입 스크립트: src/view/crud.js (앱 초기화 및 이벤트 연결)
+-->
 <!doctype html>
 <html lang="ko">
   <head>

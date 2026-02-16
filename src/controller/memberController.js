@@ -1,3 +1,15 @@
+/**
+ * [파일 역할]
+ * - 멤버 CRUD 흐름(조회/전체선택/추가/수정/삭제)을 조정하는 메인 컨트롤러.
+ *
+ * [왜 필요한가]
+ * - Model(LocalStorage)과 View(DOM/팝업) 사이의 조정 계층이 있어야 예외 처리와 UI 갱신이 일관된다.
+ *
+ * [핵심 기능]
+ * - mainFrm: 초기/재렌더 진입점
+ * - sumCheckbox: 전체 선택 체크박스 동기화
+ * - addMember/modifyMember/delMember: 사용자 액션 검증 후 view/model 호출
+ */
 import memberModel from "../model/memberModel.js";
 import memberView from "../view/memberView.js";
 

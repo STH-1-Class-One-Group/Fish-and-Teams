@@ -15,3 +15,10 @@ const themeModel = {
 
 
 export default themeModel;
+/**
+ * [파일 역할]
+ * - 현재 테마 값을 localStorage에 저장/조회하는 테마 데이터 모델.
+ *
+ * [왜 필요한가]
+ * - 사용자가 선택한 테마를 새로고침 이후에도 유지하려면 영속 저장소 계층이 필요하다.
+ */

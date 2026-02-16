@@ -1,3 +1,15 @@
+/**
+ * [파일 역할]
+ * - 선택된 테마를 실제 DOM(body/select/button 텍스트)에 반영하는 View 모듈.
+ *
+ * [왜 필요한가]
+ * - 테마 저장(model)과 화면 반영(view)을 분리하면 역할이 명확해지고 확장이 쉬워진다.
+ *
+ * [핵심 기능]
+ * - body 클래스 교체(dark/light/ocean)
+ * - select 선택값 동기화
+ * - 표시 버튼(theme-display-btn) 텍스트를 현재 테마명으로 갱신
+ */
 const themeView = {
   // DOM 요소 가져오기
   body: document.body,

@@ -19,3 +19,10 @@ const fishLoopController = {
 };
 
 export default fishLoopController;
+/**
+ * [파일 역할]
+ * - 낚시 게임에서 반복 동작(interval) 시작/종료를 제어하는 보조 컨트롤러.
+ *
+ * [왜 필요한가]
+ * - 게임 종료/스킵 시 interval 정리를 놓치면 메모리 누수나 중복 동작이 발생할 수 있다.
+ */

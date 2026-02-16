@@ -1,3 +1,15 @@
+/**
+ * [파일 역할]
+ * - "완전 랜덤 팀 배정" 버튼 클릭 이벤트를 처리하는 컨트롤러.
+ *
+ * [왜 필요한가]
+ * - 조건 기반 배정과 랜덤 배정을 분리하면 사용자 선택지가 명확해지고 코드 책임도 분리된다.
+ *
+ * [핵심 기능]
+ * - click 이벤트에서 팀 수/인원 검증
+ * - randomArrange 모델 호출
+ * - renderTeamResults로 결과 렌더링 및 후속 게임 시작 연결
+ */
 import randomArrange from "../model/randomArrange.js";
 import renderTeamResults from "../view/renderTeamResult.js";
 

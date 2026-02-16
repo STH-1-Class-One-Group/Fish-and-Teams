@@ -51,3 +51,16 @@ function renderTeamResults(teams) {
 }
 
 export default renderTeamResults;
+/**
+ * [파일 역할]
+ * - 계산된 팀 배열을 최종 결과 카드 UI로 렌더링하고, 이어서 미니게임 시작을 트리거하는 View 함수.
+ *
+ * [왜 필요한가]
+ * - 팀 배정 결과를 사용자가 바로 이해할 수 있는 카드 형태로 제공하고,
+ *   같은 데이터로 다음 단계(낚시 게임)로 자연스럽게 이어지게 하기 위해 필요하다.
+ *
+ * [핵심 기능]
+ * - 팀별 인원/평균 능력 계산 후 카드 DOM 생성
+ * - 최종 결과 영역(team-result-content) 갱신
+ * - window.startFishingGame 호출로 후속 플로우 시작
+ */

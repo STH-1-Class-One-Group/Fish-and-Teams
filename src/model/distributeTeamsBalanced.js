@@ -134,3 +134,15 @@ const distributeTeamsBalanced = (members, teamCount, options) => {
 };
 
 export default distributeTeamsBalanced;
+/**
+ * [파일 역할]
+ * - 조건(능력/성별/나이)에 맞춰 팀 간 밸런스를 최대한 맞추는 팀 배정 알고리즘.
+ *
+ * [왜 필요한가]
+ * - 단순 랜덤 배정보다 팀 편차를 줄여 공정한 게임/활동이 가능하도록 돕는다.
+ *
+ * [핵심 기능]
+ * - 옵션에 따라 멤버 점수 계산(getScore)
+ * - 스네이크 방식으로 1차 분배(인원 균등화)
+ * - 팀 평균 점수 차이를 줄이는 swap 최적화 반복
+ */

@@ -1,3 +1,16 @@
+/**
+ * [파일 역할]
+ * - "조건부 팀 배정" 버튼 클릭 이벤트를 바인딩하고, 입력 검증 후 밸런스 배정을 실행하는 컨트롤러.
+ *
+ * [왜 필요한가]
+ * - 화면 입력(team 수, 옵션 체크)을 모델 호출 규격으로 정리하고, 잘못된 입력을 사전 차단해야
+ *   사용자에게 예측 가능한 결과를 제공할 수 있다.
+ *
+ * [핵심 기능]
+ * - click 이벤트에서 팀 수/옵션 유효성 검사
+ * - 멤버 데이터 로드 후 distributeTeamsBalanced 호출
+ * - renderTeamResults로 결과 화면/미니게임 흐름 연결
+ */
 import distributeTeamsBalanced from "../model/distributeTeamsBalanced.js";
 import renderTeamResults from "../view/renderTeamResult.js";
 

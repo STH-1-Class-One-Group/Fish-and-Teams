@@ -60,3 +60,16 @@ body {
 .ocean * {
     color: #0E1B33;
 }
+/*
+  [파일 역할]
+  - 테마(light/dark/ocean)별 색상과 배경 표현을 담당하는 스타일 파일.
+
+  [왜 필요한가]
+  - 사용자가 선호하는 시각 모드를 선택할 수 있게 해 가독성과 사용자 경험을 높인다.
+  - 테마 전환 로직(themeController/themeView)과 직접 연결되는 시각 계층이다.
+
+  [핵심 기능]
+  - body 테마 전환 트랜지션
+  - light/dark/ocean별 배경/텍스트/버튼 대비 설정
+  - dark 모드에서 select option, 특정 텍스트(.dark-text) 가독성 보정
+*/

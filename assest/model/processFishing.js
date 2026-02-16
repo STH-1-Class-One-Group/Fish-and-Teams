@@ -2,7 +2,7 @@ import fishingGameModel from "./fishingGameModel.js";
 import fishingGameState from "./fishingGameState.js";
 import fishingGameView from "../view/fishingGameView.js";
 import fishLoopController from "./fishLoopController.js";
-import popupFish from "../view/popupfish.js";
+import popupFish from "../view/popupFish.js";
 
 // [핵심 로직] 낚시 진행
 // 흐름: 스페이스바 → 즉시 잠금 → 애니메이션 → 애니메이션 종료 후 팝업 → 슬라이드 이동 → 잠금 해제

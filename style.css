@@ -1,128 +1,185 @@
-/* [1] 기본 레이아웃 */
-body {
-    font-family: 'Pretendard', sans-serif;
-    text-align: center;
-    padding: 20px;
-    background-color: #f0f4f8;
-    margin: 0;
-    overflow-y: auto;
-}
-
-#app {
-    margin-bottom: 20px;
-    max-height: 400px;
-    overflow-y: auto;
-    background: white;
-    border-radius: 10px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-    padding: 10px;
-}
-
-/* [2] 팀 설정 박스 */
-#detail-config-box {
-    border: 3px solid #333;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 20px auto;
-    max-width: 500px;
-    background: white;
-}
-
-.config-row {
-    display: flex;
-    align-items: center;
+/*CUD 버튼_공통 (배치, 정렬)*/
+.manage-buttons {
     margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/*<button> 공통 디자인 속성*/
+.manage-buttons button { 
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+/*추가 버튼*/
+.header-btn-C {
+    background-color: #4a90e2;
+}
+/*수정 버튼*/
+.header-btn-U {
+    background-color: #50c878;
+}
+/*삭제 버튼*/
+.header-btn-D {
+    background-color: #ff6b6b;
+}
+
+/*----------------------------------------------------------------------*/
+/* 조건부, 랜덤 버튼_공통 (배치, 정렬)*/
+.button-wrapper {
+    margin-top: 20px;
+    display: flex;
     gap: 10px;
 }
 
-/* [3] 미니게임 오버레이 (핵심 수정) */
+/* 조건부 배정 버튼 (파란색) */
+.btn-Control {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 랜덤 배정 버튼 (초록색) */
+.btn-Random {
+    background-color: #28a745;
+    color: white;
+}
+
+/*----------------------------------------------------------------------*/
+/*<overlay> 기존 화면 위에 종이 한 장 얹음(새 창 뜨는게X)*/
 #minigame-overlay {
+    font-family: 'Pretendard', sans-serif;
+    text-align: center; 
+    margin: 0;
+    padding: 0;
     display: none;
     position: fixed !important;
-    /* 화면에 박제 */
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100vw; 
     height: 100vh;
-    z-index: 10000;
-    background: white;
+    z-index: 10000; 
+    background-color: white; 
 }
 
-.swiper {
+/*<swiper> 미니게임 실행 시에만 swiper 기능 쓸거임. 
+액자 크기 지정. 100*100의 크기로 화면을 비출것.*/
+#minigame-overlay .swiper {
     width: 100%;
     height: 100%;
 }
 
-.game-screen {
+/*<game-screen> 액자 뒤 화면. 배치할 요소들의 기준점*/
+#minigame-overlay .game-screen {
+    position: relative; /*기준*/
     width: 100%;
     height: 100%;
-    position: relative;
-    background: linear-gradient(to bottom, #C7E0FD 0%, #C7E0FD 35%, #01579b 55%, #01579b 100%);
-    overflow: hidden;
+    background:  #e4f0f9 100%;
+    overflow: hidden; 
+}
+/*----------------------------------------------------------------------*/
+/*요소들*/
+
+/*<team-info> 팀이름+내역(왼쪽 위) 전체 영역*/
+#minigame-overlay .team-info {
+    position: absolute; 
+    top: 30px; 
+    left: 40px; 
+    text-align: left;
+    z-index: 300;
 }
 
+/*<record-box> 낚인 내역(왼쪽 위 박스)*/
+#minigame-overlay .record-box {
+    background: rgba(255, 255, 255, 0.9);
+    border: 4px solid #333;
+    padding: 20px;
+    min-width: 250px;
+    min-height: 150px;
+    margin-top: 15px;
+    font-size: 1.5rem;
+    border-radius: 10px;
+}
 
-/* [4] 물결 레이어 시스템 - 바다 위치 하향 조정 */
-.wave-background,
-.wave-foreground {
+/*<wave-canvas> 파도 - 이미지 한 장으로 무한루프 고*/
+#minigame-overlay .wave-canvas {
     position: absolute;
-    top: 250%;
-    /* 이 수치가 커질수록 바다가 아래로 내려갑니다 */
-    width: 100%;
-    height: 20%;
+    width: 200.5% !important;
+    height: 100%; 
+    background-position: left top !important; 
+    background-repeat: repeat-x; 
+    shape-rendering: crispEdges;
+    -webkit-transform: translateZ(0); 
+
+    animation: wave-move 25s linear infinite;
 }
 
-.wave-background {
-    z-index: 50;
+/*<wave-canvas.-one> 파도1 - 왼쪽으로 흐름*/
+#minigame-overlay .wave-canvas.-one { 
+    position: absolute;
+    background-image: url("images/sea_wave.svg"); 
+    background-size: 300px 100% !important; 
+    box-shadow: -0.5px 0 0 #1A73E8, 0.5px 0 0 #1A73E8; 
+    top: 190px; 
+    filter: brightness(0.6) contrast(1.2);
+    transform: translateZ(0); 
+    opacity: 0.8;
+    z-index: 149;     
+
+    animation: wave-move 33s linear infinite;
 }
 
-.wave-foreground {
-    z-index: 200;
+/*<wave-canvas.-two> 파도2 - 위아래로 움직임*/
+#minigame-overlay .wave-canvas.-two { 
+    position: absolute;
+    background-image: url("images/sea_wave.svg");
+    background-size: 300px 100%; 
+    height: 110% !important;
+    top: 170px;
+    filter: brightness(0.8) contrast(1.2);
+    opacity: 0.4; 
+    z-index: 10;
+
+    animation: wave-move 33s linear infinite, just-up-down 5.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+
+}
+
+/*<wave-canvas.-three> 파도3 - 오른쪽으로 흐름*/
+#minigame-overlay .wave-canvas.-three { 
+    position: absolute;
+    background-image: url("images/sea_wave.svg");
+    background-size: 300px 100%; 
+    height: 110% !important; 
+    top: 170px; 
+    filter: brightness(0.6) contrast(1.2); 
+    opacity: 0.5;
+    z-index: 205;
+    animation: wave-move 28s linear infinite reverse; 
+
+}
+
+/* <bg-plus> 배경 꾸밈요소 (바다 바닥) */
+#minigame-overlay .bg-plus { 
+    position: absolute;
+    background-image: url("images/bg_plus1.png");
+    background-size: contain; 
+    background-repeat: repeat-x;
+    background-position: bottom;
+    width: 103%;    
+    height: 300px;     
+    bottom: 0;    
+    left: 0;
+    opacity: 0.5;
+    z-index: 150;      
     pointer-events: none;
 }
 
-.wave-canvas {
-    position: absolute;
-    width: 400vw;
-    height: 400vw;
-    left: -150vw;
-    border-radius: 43%;
-    transform-origin: 50% 50%;
-    animation: wave-rotate 20s infinite linear;
-}
-
-.wave-canvas.-one {
-    background: #4fc3f7;
-    opacity: 0.6;
-    top: 0px;
-}
-
-.wave-canvas.-two {
-    background: #0670d3;
-    opacity: 0.6;
-    top: 10px;
-    animation-direction: reverse;
-}
-
-.wave-canvas.-three {
-    background: #012d50;
-    opacity: 0.4;
-    top: 20px;
-}
-
-/* [5] 배 위치 조정 - 바다 수평선에 맞춤 */
-.boat-container {
-    position: absolute;
-    top: 250%;
-    /* 위 wave의 top 수치와 반드시 일치시켜야 배가 물 위에 뜹니다 */
-    left: 50%;
-    transform: translate(-50%, -90%);
-    width: 480px;
-    height: 320px;
-    z-index: 150;
-}
-
-.boat-container {
+/*<boat-container> 배(배치, 정렬)*/
+#minigame-overlay .boat-container {
     position: absolute;
     top: 45%;
     left: 50%;
@@ -130,66 +187,177 @@ body {
     width: 480px;
     height: 320px;
     z-index: 150;
+
+    animation: boat-physics-bobbing 3.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 }
 
-.fishing-line {
+/*<boat> 배 - 역사다리꼴 */
+#minigame-overlay .boat {
     position: absolute;
-    width: 4px;
-    background: #fff;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background-color: #894F1C; 
+    border: 8px solid #5d3513;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
+}
+
+/*<fisherman> 어부 전체_위치*/
+#minigame-overlay .fisherman {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    z-index: -1;
+}
+
+/*<fisherman img> 어부_이미지 크기*/
+#minigame-overlay .fisherman img {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+}
+
+/*<fish-style-0> 어부1*/
+/*game.js) fish-style-${idx % 3} - 어부는 셋이 전부라 %3으로 돌려가며 씀.*/
+#minigame-overlay .fish-style-0 {
+    bottom: 40px;
+    width: 250px !important; 
+    transform: translate(calc(-50% + 145px), 0px); 
+} 
+
+/*<fish-style-1> 어부2*/
+#minigame-overlay .fish-style-1 {
+    bottom: 40px; 
+    width: 280px !important; 
+    transform: translate(calc(-50% + 160px), 0px); 
+}
+
+/*<fish-style-2> 어부3*/
+#minigame-overlay .fish-style-2 { 
+    bottom: 40px; 
+    width: 280px !important;
+    transform: translate(calc(-50% + 160px), 0px); 
+}
+
+/*<fishing-line> 낚싯줄*/
+#minigame-overlay .fishing-line {
+    position: absolute; 
+    width: 3px;
+    background: #fff; 
     height: 150px;
     transition: height 0.6s ease-in-out;
     z-index: 60;
 }
 
-.fishing-line.line-style-0 {
-    top: -30px !important;
-    right: -80px !important;
+/*game.js) line-style-${styleIdx} - 어부별 낚싯줄 위치*/
+#minigame-overlay .line-style-0 {
+    right: -30px;
+    top: 55px; 
 }
 
-.fishing-line.line-style-1 {
-    top: 25px !important;
-    right: -78px !important;
+#minigame-overlay .line-style-1 {
+    right: -60px;
+    top: 85px; 
 }
 
-.fish {
+#minigame-overlay .line-style-2 {
+    right: -60px;
+    top: 90px; 
+}
+
+/*<float> 낚시 찌 🔴*/
+#minigame-overlay .float {
     position: absolute;
-    bottom: -35px;
-    left: -20px;
+    bottom: -15px; 
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    z-index: 70;
+}
+
+/*<fish> 물고기 🐟*/
+#minigame-overlay .fish {
+    position: absolute; 
+    bottom: -35px; 
+    left: -20px; 
     display: none;
     font-size: 2.5rem;
+    z-index: 71;
+
     animation: struggle 0.2s infinite;
 }
 
+/*----------------------------------------------------------------------------*/
+/*결과창_game.js*/
+
+/*<game-result-overlay>*/
 #game-result-overlay {
-    display: none;
     position: absolute;
+    display: none;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 280px;
+    z-index: 9999;
     background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    z-index: 10001;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes wave-rotate {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+/*<game-over-btn> 결과창 보기 버튼*/
+.game-over-btn{
+    margin-top: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 5px 12px !important;
 }
 
-@keyframes struggle {
-    0% {
-        transform: rotate(-10deg);
-    }
-
-    100% {
-        transform: rotate(10deg);
-    }
+/*<kakao-share-btn> 카톡 공유 버튼*/
+.kakao-share-btn {
+    background-color: #FEE500 !important;
+    margin-top: 20%;
+    color: #191919 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 5px;
 }
+
+/*<team-result-area>결과창*/
+.team-result-area{
+    display: none;
+}
+
+/*----------------------------------------------------------------------------*/
+/*애니메이션*/
+
+/*보트 둥실둥실*/
+@keyframes boat-physics-bobbing { 
+    0%, 100% { transform: translate(-50%, -88%) rotate(-0.8deg); }
+    50% { transform: translate(-50%, -96%) rotate(1.5deg); }
+}
+
+/*물고기 파닥파닥 - 왼오왼오왼오*/
+@keyframes struggle { 
+    0% { transform: rotate(-10deg); } 
+    100% { transform: rotate(10deg); } 
+}
+
+
+/*파도) 무한으로 돌아감*/
+@keyframes wave-move {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } 
+}
+
+
+/*파도) 위아래 움직임*/
+@keyframes just-up-down {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+

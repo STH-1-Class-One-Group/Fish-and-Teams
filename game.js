@@ -185,6 +185,10 @@ function renderGameScreens() {
                     <h2>${team.teamName}</h2>
                     <div class="record-box" id="record-${idx}">대기 중...</div>
                 </div>
+                <div class="clouds">
+                    <img class = "cloud1" src="images/cloud.png" alt="구름1">
+                    <img class = "cloud2" src="images/cloud.png" alt="구름2">
+                </div>
                 <div class="wave-background"><div class="wave-canvas -one"></div></div>
                 <div class="boat-container">                    
                     <div class="fisherman fish-style-${idx % 3}">

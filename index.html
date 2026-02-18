@@ -24,7 +24,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -76,6 +76,7 @@
             id="theme-select"
             name="theme-select"
             class="z-index-5 absolute left0 top0 width100px height40px opacity-0 cursor-pointer"
+            aria-label="모드 선택"
           >
             <option value="dark" class="text-bold">다크모드</option>
             <option value="light" class="text-bold">라이트 모드</option>
@@ -124,7 +125,11 @@
           <div class="table">
             <ul class="table-row table-header">
               <li class="table-cells tc-checkbox center">
-                <input type="checkbox" onclick="sumCheckbox(this)" />
+                <input
+                  type="checkbox"
+                  aria-label="전체 선택"
+                  onclick="sumCheckbox(this)"
+                />
               </li>
               <li class="table-cells tc-number">No</li>
               <li class="table-cells tc-etc">이름</li>
@@ -142,6 +147,7 @@
             <div class="flex align-center">
               <p class="text-bold">팀 수</p>
               <input
+                aria-label="팀 수"
                 class="margin-left-10 dark-text"
                 type="number"
                 id="input-team-count"
@@ -153,15 +159,15 @@
               <p class="text-bold">밸런스</p>
               <ul class="flex flex-gap-10">
                 <li class="flex flex-gap-5 align-center">
-                  <input type="checkbox" id="chk-age" />
+                  <input aria-label="나이 밸런스" type="checkbox" id="chk-age" />
                   <p>나이</p>
                 </li>
                 <li class="flex flex-gap-5 align-center">
-                  <input type="checkbox" id="chk-gender" checked />
+                  <input aria-label="성별 밸런스" type="checkbox" id="chk-gender" checked />
                   <p>성별</p>
                 </li>
                 <li class="flex flex-gap-5 align-center">
-                  <input type="checkbox" id="chk-ability" checked />
+                  <input aria-label="능력치 밸런스" type="checkbox" id="chk-ability" checked />
                   <p>능력치</p>
                 </li>
               </ul>

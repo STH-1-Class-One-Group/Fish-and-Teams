@@ -15,6 +15,13 @@
     color: #FFFFFF; 
 }
 
+
+
+
+
+
+
+/*----------------------------------------------------------------------*/
 /* ===== Ocean ===== */
 .ocean {
     background-image: url("/img/ocean_bg01.jpg");
@@ -22,6 +29,70 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
 .ocean * {
     color: #0E1B33;
+}
+
+.header {
+    color: #0E1B33 !important;
+}
+
+/*CUD 버튼_공통 (배치, 정렬)*/
+.manage-buttons {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/*<button> 공통 디자인 속성*/
+.manage-buttons button { 
+    color: #38223e !important;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+/*버튼 개별*/
+.header-btn-C {
+    background-color:#89eccd;
+}
+/*수정 버튼*/
+.header-btn-U {
+    background-color:#5dd1ad;
+}
+/*삭제 버튼*/
+.header-btn-D {
+    background-color: #41efa9;
+}
+/*------------------------------------*/
+
+/* 배정 버튼 공통 (배치, 정렬)*/
+.button-wrapper {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* 조건부 버튼 */
+button.btn-Control {
+    color: rgb(181, 51, 51);
+    background-color: #92eed1;
+}
+
+/* 랜덤 버튼 */
+button.btn-Random {
+    background-color: #92eed1;
+    /* color: rgb(143, 6, 6); */
+}
+
+/*------------------------------------*/
+
+
+.footer{
+    color: #92eed1;
+
 }

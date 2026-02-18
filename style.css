@@ -1,23 +1,3 @@
-/* 조건부, 랜덤 버튼_공통 (배치, 정렬)*/
-.button-wrapper {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-/* 조건부 배정 버튼 (파란색) */
-.btn-Control {
-    background-color: #007bff;
-    color: white;
-}
-
-/* 랜덤 배정 버튼 (초록색) */
-.btn-Random {
-    background-color: #28a745;
-    color: white;
-}
-
-/*----------------------------------------------------------------------*/
 /*<overlay> 기존 화면 위에 종이 한 장 얹음(새 창 뜨는게X)*/
 #minigame-overlay {
     font-family: 'Pretendard', sans-serif;
